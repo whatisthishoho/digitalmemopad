@@ -220,7 +220,7 @@
       <div class="logo" role="img" aria-label="D'VELOP">D<svg class="tick" viewBox="0 0 24 24"><use href="#i-tick"/></svg>VELOP</div>
       <span class="divider"></span>
       <div>
-        <div class="eyebrow">2026 · 소모임 네트워킹</div>
+        <div class="eyebrow">D’VELOP 2026 · 도전 공유 게시판</div>
         <h1>우리의 <span class="accent">다음 도전</span></h1>
       </div>
     </div>
@@ -266,11 +266,12 @@
   var POLL_MS = 8000;
   var SCROLL_SPEED = 26;      // 칸이 넘칠 때 자동 스크롤 속도 (px/초)
   var TOP_N = 5;
+  // name은 기존 시트·저장 데이터와 호환되는 값, label은 화면에 표시하는 이름입니다.
   var CATEGORIES = [
-    { name: "일·공부", emoji: "💼", color: "var(--c1)" },
-    { name: "돈·생활", emoji: "💰", color: "var(--c2)" },
-    { name: "해보고 싶은 경험", emoji: "✈️", color: "var(--c3)", ink: "var(--ink)" },   // 노랑 칸은 글씨를 진하게
-    { name: "아직 찾는 중", emoji: "🔍", color: "var(--c4)" }
+    { name: "일·공부", label: "배움과 커리어", emoji: "💼", color: "var(--c1)" },
+    { name: "돈·생활", label: "나만의 머니 플랜", emoji: "💰", color: "var(--c2)" },
+    { name: "해보고 싶은 경험", label: "경험의 확장", emoji: "✈️", color: "var(--c3)", ink: "var(--ink)" },   // 노랑 칸은 글씨를 진하게
+    { name: "아직 찾는 중", label: "나만의 방향", emoji: "🔍", color: "var(--c4)" }
   ];
   var DEMO_KEY = "develop_challenge_demo_v2";   // index.html 미리보기와 같은 저장소 (같은 브라우저에서 열면 폰 화면에서 쓴 카드가 여기도 뜬다)
   var DEMO = !APPS_SCRIPT_URL;
@@ -292,7 +293,7 @@
     var head = document.createElement("div");
     head.className = "col-head";
     var emo = document.createElement("span"); emo.className = "emo"; emo.textContent = c.emoji;
-    var name = document.createElement("span"); name.textContent = c.name;
+    var name = document.createElement("span"); name.textContent = c.label;
     var cnt = document.createElement("span"); cnt.className = "cnt"; cnt.textContent = "0";
     head.appendChild(emo); head.appendChild(name); head.appendChild(cnt);
     var body = document.createElement("div");
@@ -432,7 +433,7 @@
   function renderBig(c) {
     var cat = catOf(c.category);
     document.getElementById("big").style.setProperty("--cc", cat.color);
-    document.getElementById("big-chip").textContent = cat.emoji + " " + cat.name;
+    document.getElementById("big-chip").textContent = cat.emoji + " " + cat.label;
     document.getElementById("big-text").textContent = c.text;
     document.getElementById("big-text").classList.toggle("long", c.text.length > 50);
     document.getElementById("big-nick").textContent = "— " + c.nick;
@@ -467,7 +468,7 @@
       var no = document.createElement("div"); no.className = "no"; no.textContent = String(i + 1);
       var body = document.createElement("div");
       var t = document.createElement("div"); t.className = "t"; t.textContent = c.text;
-      var s = document.createElement("div"); s.className = "s"; s.textContent = cat.emoji + " " + cat.name + " · " + c.nick;
+      var s = document.createElement("div"); s.className = "s"; s.textContent = cat.emoji + " " + cat.label + " · " + c.nick;
       body.appendChild(t); body.appendChild(s);
       var h = document.createElement("div"); h.className = "h"; h.textContent = "❤️ " + c.hearts;
       li.appendChild(no); li.appendChild(body); li.appendChild(h);

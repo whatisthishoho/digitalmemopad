@@ -287,7 +287,7 @@
       <span class="px" style="right:0;top:18px;background:var(--pink)"></span>
       <div class="logo" role="img" aria-label="D'VELOP">D<svg class="tick" viewBox="0 0 24 24"><use href="#i-tick"/></svg>VELOP</div>
       <h1 id="intro-title">우리의 <span class="accent">다음 도전</span></h1>
-      <div class="sub">2026 · 소모임 네트워킹 · 한 줄이면 충분해요</div>
+      <div class="sub">D’VELOP 2026 · 도전 공유 게시판</div>
     </div>
     <div class="card intro-card">
       <div class="intro">
@@ -370,11 +370,12 @@
 <script>
   // ====== 설정 ======
   var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkzhZSj7GGrZXtF2nAQoD-1s1dlFigj7lu6lteIWPSYBk1ZUjXGpGxq-XmzDVTx0gI/exec";   // ← Apps Script 웹앱 배포 URL(/exec 로 끝나는 주소). 비워두면 예시 카드로 동작하는 미리보기 모드
+  // name은 기존 시트·저장 데이터와 호환되는 값, label은 화면에 표시하는 이름입니다.
   var CATEGORIES = [
-    { name: "일·공부", emoji: "💼", color: "var(--c1)", hint: "예) 자격증 하나 따기 📚" },
-    { name: "돈·생활", emoji: "💰", color: "var(--c2)", hint: "예) 비상금 100만원 모으기 💪" },
-    { name: "해보고 싶은 경험", emoji: "✈️", color: "var(--c3)", hint: "예) 혼자 해외여행 가보기 🌏" },
-    { name: "아직 찾는 중", emoji: "🔍", color: "var(--c4)", hint: "예) 나한테 맞는 걸 천천히 찾아볼래요 🌱" }
+    { name: "일·공부", label: "배움과 커리어", emoji: "💼", color: "var(--c1)", hint: "예) 자격증 하나 따기 📚" },
+    { name: "돈·생활", label: "나만의 머니 플랜", emoji: "💰", color: "var(--c2)", hint: "예) 비상금 100만원 모으기 💪" },
+    { name: "해보고 싶은 경험", label: "경험의 확장", emoji: "✈️", color: "var(--c3)", hint: "예) 혼자 해외여행 가보기 🌏" },
+    { name: "아직 찾는 중", label: "나만의 방향", emoji: "🔍", color: "var(--c4)", hint: "예) 나한테 맞는 걸 천천히 찾아볼래요 🌱" }
   ];
   var MAX_TEXT = 100;
   var MAX_NICK = 10;
@@ -593,7 +594,7 @@
   CATEGORIES.forEach(function (c) {
     var p = document.createElement("div");
     p.style.setProperty("--cc", c.color);
-    p.textContent = c.emoji + " " + c.name;
+    p.textContent = c.emoji + " " + c.label;
     document.getElementById("cat-preview").appendChild(p);
 
     var b = document.createElement("button");
@@ -606,7 +607,7 @@
     emo.className = "emo";
     emo.textContent = c.emoji;
     b.appendChild(emo);
-    b.appendChild(document.createTextNode(c.name));
+    b.appendChild(document.createTextNode(c.label));
     b.addEventListener("click", function () { selectCat(c.name); saveDraft(); });
     catsEl.appendChild(b);
   });
@@ -734,7 +735,7 @@
     el.style.setProperty("--cc", cat.color);
     var chip = document.createElement("span");
     chip.className = "chip";
-    chip.textContent = cat.emoji + " " + cat.name;
+    chip.textContent = cat.emoji + " " + cat.label;
     var text = document.createElement("div");
     text.className = "text";
     text.textContent = c.text;
@@ -779,7 +780,7 @@
     t.type = "button";
     t.className = "tab" + (name === "전체" ? " on" : "");
     t.setAttribute("role", "tab");
-    t.textContent = name === "전체" ? "전체" : catOf(name).emoji + " " + name;
+    t.textContent = name === "전체" ? "전체" : catOf(name).emoji + " " + catOf(name).label;
     t.addEventListener("click", function () {
       board.tab = name;
       Array.prototype.forEach.call(tabsEl.children, function (x) { x.classList.toggle("on", x === t); });
