@@ -331,7 +331,7 @@
 
       <button class="btn" id="send-btn" type="button" disabled>도전 올리기 🚀</button>
       <div class="status" id="status" role="alert"></div>
-      <p class="notice"><span>닉네임과 작성 내용은 행사장 화면에 공개됩니다.</span><span>전화번호·SNS 아이디 등 개인정보는 적지 말아주세요.</span><span><strong>욕설 및 비방 문구의 작성을 금지하며,<br>해당 게시물은 삭제 조치됩니다.</strong></span></p>
+      <p class="notice"><span>닉네임과 작성 내용은 행사장 화면에 공개됩니다.</span><span>전화번호·SNS 아이디 등 개인정보는 적지 말아주세요.</span><span><strong>욕설·비방·성적 표현의 작성을 금지하며,<br>해당 게시물은 삭제 조치됩니다.</strong></span></p>
     </div>
   </section>
 
@@ -374,6 +374,7 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
+<script src="moderation.js"></script>
 <script>
   // ====== 설정 ======
   var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkzhZSj7GGrZXtF2nAQoD-1s1dlFigj7lu6lteIWPSYBk1ZUjXGpGxq-XmzDVTx0gI/exec";   // ← Apps Script 웹앱 배포 URL(/exec 로 끝나는 주소). 비워두면 예시 카드로 동작하는 미리보기 모드
@@ -397,11 +398,7 @@
   var DEMO = !APPS_SCRIPT_URL;
 
   // ====== 필터: 서버(Code.gs)와 같은 목록. 서버의 '금지어' 탭 단어는 접속 시 받아와 더한다 ======
-  var words = [
-    "씨발", "시발", "씨바", "ㅅㅂ", "ㅆㅂ", "병신", "븅신", "ㅂㅅ", "개새끼", "새끼", "좆", "존나", "졸라", "ㅈㄴ",
-    "지랄", "ㅈㄹ", "꺼져", "닥쳐", "미친놈", "미친년", "또라이", "니애미", "느금마", "니미", "염병", "썅", "엿먹",
-    "fuck", "shit", "bitch"
-  ];
+  var words = ContentModeration.words.slice();
   var PRIVACY_PATTERNS = [
     /[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/,
     /01[016789][\s.\-]?\d{3,4}[\s.\-]?\d{4}/,
@@ -418,8 +415,8 @@
   }
   // "privacy" / "word" / "" 를 돌려준다
   function checkText(s) {
-    if (PRIVACY_PATTERNS.some(function (re) { return re.test(s); })) return "privacy";
-    if (words.some(function (w) { return wordRegex(w).test(s); })) return "word";
+    if (PRIVACY_PATTERNS.some(function (re) { re.lastIndex = 0; return re.test(s); })) return "privacy";
+    if (ContentModeration.hasProhibited(s, words)) return "word";
     return "";
   }
 
@@ -696,7 +693,7 @@
     if (np) { statusEl.textContent = np; return; }
     var problem = checkText(text) || checkText(nick);
     if (problem === "privacy") { statusEl.textContent = "전화번호·이메일·SNS 아이디 같은 개인정보는 빼고 적어주세요 🙏"; return; }
-    if (problem === "word") { statusEl.textContent = "사용할 수 없는 말이 있어요. 고운 말로 수정해주세요 🙏"; return; }
+    if (problem === "word") { statusEl.textContent = "욕설·비방·성적 표현이 포함되어 있어요. 내용을 수정해주세요."; return; }
 
     // 실패 후 같은 내용을 다시 누르면 같은 카드번호를 써서 서버에서 중복 저장되지 않게 한다
     var pending = storeGet(OUTBOX_KEY, []).filter(function (c) {
@@ -829,7 +826,7 @@
       var d = await api.loadCards();
       // 하트 전송 중이거나, 요청 뒤에 하트를 눌렀다면 옛 목록이므로 버린다
       if (board.busy || seq !== board.seq || !d || !d.cards) return;
-      board.cards = d.cards;
+      board.cards = d.cards.filter(function (card) { return ContentModeration.safeCard(card, words); });
       board.myHeart = d.myHeart || "";
       applyLocalHeart();
       renderBoard();

@@ -1,3 +1,71 @@
+/* Shared text checks for the participant UI, display and Apps Script.
+ * Keyword-based checks reduce exposure; they do not understand every sentence.
+ */
+var ContentModeration = (function () {
+  "use strict";
+  var words = [
+    "씨발", "시발", "씨바", "씨벌", "시벌", "씨빨", "시빨", "씨팔", "시팔", "쉬발", "쒸발", "ㅅㅂ", "ㅆㅂ",
+    "병신", "븅신", "빙신", "ㅂㅅ", "개새끼", "새끼", "좆", "좃", "존나", "졸라", "ㅈㄴ", "지랄", "ㅈㄹ",
+    "꺼져", "닥쳐", "미친놈", "미친년", "또라이", "니애미", "네애미", "느금마", "니미", "염병", "썅", "엿먹",
+    "개년", "쌍년", "쌍놈", "쓰레기새끼", "정신병자", "죽여버", "죽어버", "뒤져", "뒤질", "한남충", "한녀충",
+    "섹스", "쎅스", "섹쓰", "야동", "포르노", "폰섹", "몸캠", "성매매", "조건만남", "원나잇", "강간", "윤간",
+    "페니스", "딜도", "오르가즘", "오르가슴", "사정액", "질내사정", "노콘", "씹질", "걸레년", "창녀", "창놈",
+    "fuck", "fucking", "shit", "bitch", "asshole", "motherfucker", "porn", "porno", "sex", "sexy", "nudes", "penis", "pussy", "dick", "cock", "cumshot", "blowjob", "handjob", "hentai"
+  ];
+  var choseong = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+  function normalize(value) {
+    var s = String(value == null ? "" : value);
+    if (s.normalize) s = s.normalize("NFKC");
+    return s.toLowerCase()
+      .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF\uFE00-\uFE0F]/g, "")
+      .replace(/[\u1100-\u1112]/g, function (ch) { return choseong.charAt(ch.charCodeAt(0) - 0x1100); });
+  }
+  function compact(s) {
+    return s.replace(/[^a-z0-9가-힣ㄱ-ㅎㅏ-ㅣ]/g, "");
+  }
+  function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  function wordHit(value, word) {
+    var key = compact(normalize(word));
+    if (!key) return false;
+    if (/^[a-z]+$/.test(key)) {
+      // English word boundaries avoid blocking e.g. "Essex" and "Scunthorpe".
+      var letters = key.split("").map(function (ch) { return escapeRegex(ch) + "+"; }).join("[^a-z0-9]*");
+      return new RegExp("(?:^|[^a-z0-9])" + letters + "(?:$|[^a-z0-9])", "i").test(value);
+    }
+    var text = compact(value);
+    var withoutDigits = text.replace(/([가-힣ㄱ-ㅎ])[0-9]+(?=[가-힣ㄱ-ㅎ])/g, "$1");
+    return [text, withoutDigits, withoutDigits.replace(/([가-힣ㄱ-ㅎ])\1+/g, "$1")].some(function (form) {
+      return form.indexOf(key) !== -1;
+    });
+  }
+  function contextualHit(value) {
+    var text = compact(value);
+    // These short words also appear in ordinary sentences such as "해보지" or "잠을 자지 않고".
+    return ["보지", "자지", "자위", "정액"].some(function (word) {
+      return text === word || new RegExp(escapeRegex(word) + "(?:빨|핥|보여|사진|만져|삽입|크기)").test(text)
+        || new RegExp("(?:^|[^가-힣])" + escapeRegex(word) + "(?:를|가|는|랑|만)(?:$|[^가-힣])").test(value);
+    });
+  }
+  function hasProhibited(value, extraWords) {
+    var text = normalize(value);
+    var leet = text.replace(/[a-z0-9@$!]+/g, function (token) {
+      if (!/[a-z]/.test(token)) return token;
+      return token.replace(/[013457@$!]/g, function (ch) {
+        return ({ "0":"o", "1":"i", "3":"e", "4":"a", "5":"s", "7":"t", "@":"a", "$":"s", "!":"i" })[ch];
+      });
+    });
+    return contextualHit(text) || words.concat(extraWords || []).some(function (word) {
+      return wordHit(text, word) || (leet !== text && wordHit(leet, word));
+    });
+  }
+  function safeCard(card, extraWords) {
+    return !!card && !hasProhibited(card.nick, extraWords) && !hasProhibited(card.text, extraWords);
+  }
+  return { words: words.slice(), normalize: normalize, hasProhibited: hasProhibited, safeCard: safeCard };
+})();
+if (typeof module !== "undefined" && module.exports) module.exports = ContentModeration;
+
+
 /**
  * 🚀 「D'velop 2026, 우리의 다음 도전」 — Apps Script 백엔드
  *
@@ -32,8 +100,8 @@ var HEART_HEADERS = ["마지막 변경 시각", "기기번호", "하트 준 카�
 var HCOL = { time: 1, device: 2, card: 3 };
 
 // 동시 접속 대비: 카드 목록을 몇 초간 캐시에 두고 모든 폰이 그걸 나눠 받는다 (매번 시트를 읽지 않게)
-var DATA_CACHE_KEY = "data_v2";
-var WORDS_CACHE_KEY = "words_v2";
+var DATA_CACHE_KEY = "data_v3_moderation";
+var WORDS_CACHE_KEY = "words_v3_moderation";
 var FRESH_MS = 5000;        // 이 시간이 지나면 다음 요청 때 1명만 시트를 다시 읽는다 (나머지는 직전 목록을 받음)
 var CACHE_CHUNK = 25000;    // 캐시 값 1개 크기 제한(100KB)을 넘지 않게 나눠 담는 단위 (글자 수)
 var CACHE_TTL = 21600;      // 6시간
@@ -45,11 +113,7 @@ var DEFAULT_NICK = "익명";
 var MASK = "***";
 
 // 기본 금지어. 행사 중 새로 보이는 단어는 '금지어' 탭 A2 아래에 추가하면 바로 적용된다
-var BASE_WORDS = [
-  "씨발", "시발", "씨바", "ㅅㅂ", "ㅆㅂ", "병신", "븅신", "ㅂㅅ", "개새끼", "새끼", "좆", "존나", "졸라", "ㅈㄴ",
-  "지랄", "ㅈㄹ", "꺼져", "닥쳐", "미친놈", "미친년", "또라이", "니애미", "느금마", "니미", "염병", "썅", "엿먹",
-  "fuck", "shit", "bitch"
-];
+var BASE_WORDS = ContentModeration.words.slice();
 
 // 개인정보 형태 (이메일을 @아이디보다 먼저 검사해야 통째로 가려진다)
 var PRIVACY_PATTERNS = [
@@ -138,6 +202,9 @@ function addCard_(body) {
 
   // 폰에서 한 번 걸렀지만, 그래도 들어온 욕설·개인정보는 *** 로 가려서 저장한다
   var words = getWords_();
+  if (ContentModeration.hasProhibited(text, words) || ContentModeration.hasProhibited(nick, words)) {
+    return { status: "error", message: "욕설·비방·성적 표현은 등록할 수 없어요. 내용을 수정해주세요." };
+  }
   var t = mask_(text, words);
   var n = mask_(nick, words);
 
@@ -277,6 +344,7 @@ function buildData_(writeCounts) {
   if (last < 2) return { cards: cards, hearts: hearts };
 
   var rows = sheet.getRange(2, 1, last - 1, CARD_HEADERS.length).getDisplayValues();
+  var moderationWords = getWords_();
   var changed = false;
   var heartCol = rows.map(function (r, i) {
     var text = String(r[COL.text - 1]).trim();
@@ -284,7 +352,7 @@ function buildData_(writeCounts) {
     var id = cardId_(r[COL.id - 1], i + 2);   // 시트에 손으로 넣은 행도 표시되도록
     var n = counts[id] || 0;
     if (String(r[COL.hearts - 1]).trim() !== String(n)) changed = true;
-    if (String(r[COL.show - 1]).trim().toUpperCase() !== "N") {
+    if (String(r[COL.show - 1]).trim().toUpperCase() !== "N" && ContentModeration.safeCard({ nick: r[COL.nick - 1], text: text }, moderationWords)) {
       cards.push({
         id: id,
         category: r[COL.category - 1],
@@ -401,7 +469,7 @@ function wordRegex_(word) {
 function mask_(s, words) {
   var hit = false;
   var out = String(s || "");
-  PRIVACY_PATTERNS.concat(words.map(wordRegex_)).forEach(function (re) {
+  PRIVACY_PATTERNS.forEach(function (re) {
     re.lastIndex = 0;
     if (re.test(out)) {
       hit = true;

@@ -58,10 +58,10 @@
   .stats > span { background: #fff; color: var(--ink); border-radius: 999px; padding: 0.3em 0.9em; box-shadow: 0 4px 12px rgba(10, 70, 120, .18); }
   .stats .num { font-size: 1.3em; font-weight: 900; }
   .live { display: inline-flex; align-items: center; gap: 0.5vw; color: var(--green); }
-  .live i { width: 0.7vw; height: 0.7vw; min-width: 10px; min-height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px 2px rgba(11,170,116,.5); animation: pulse 1.6s ease-in-out infinite; }
+  .live i { width: 0.7vw; height: 0.7vw; min-width: 10px; min-height: 10px; border-radius: 50%; background: #E64B4B; box-shadow: 0 0 10px 2px rgba(230,75,75,.4); animation: pulse 1.6s ease-in-out infinite; }
   @keyframes pulse { 50% { opacity: .35; transform: scale(.7); } }
-  .live.off { color: #C0504D; }
-  .live.off i { background: #C0504D; box-shadow: none; animation: none; }
+  .live.off { color: #6A6F8E; }
+  .live.off i { background: #9BA1AF; box-shadow: none; animation: none; }
   .join { font-size: clamp(12px, 0.95vw, 18px); color: var(--navy); font-weight: 700; margin-top: 0.8vh; }
 
   /* ====== 4칸 ====== */
@@ -296,6 +296,7 @@
     </div>
   </div>
 
+<script src="moderation.js"></script>
 <script>
   // ====== 설정 ======
   var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkzhZSj7GGrZXtF2nAQoD-1s1dlFigj7lu6lteIWPSYBk1ZUjXGpGxq-XmzDVTx0gI/exec";   // ← index.html 과 같은 Apps Script 웹앱 URL. 비워두면 예시 카드로 동작하는 미리보기 모드
@@ -391,6 +392,7 @@
 
   // 시트 순서(오래된 → 최신)대로 받아서, 새 카드는 각 칸 맨 위에 꽂는다
   function sync(cards) {
+    cards = cards.filter(function (card) { return ContentModeration.safeCard(card); });
     latest = cards;
     var seen = {};
     var rankOf = {};
