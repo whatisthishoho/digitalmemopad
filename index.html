@@ -155,6 +155,10 @@
   .counter { text-align: right; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
   .counter.over { color: var(--warn); }
   .status { min-height: 22px; font-size: 14px; color: var(--warn); margin-top: 10px; text-align: center; word-break: keep-all; }
+  .write-encouragement { margin:0 0 12px; font-size:14px; color:var(--muted); line-height:1.6; word-break:keep-all; }
+  .write-encouragement strong { display:block; color:var(--ink); font-weight:700; }
+  .write-encouragement span { display:block; }
+  .notice > span { display:block; margin-top:4px; }
   .notice { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 14px; word-break: keep-all; }
 
   /* 전송 중 */
@@ -292,8 +296,8 @@
     </div>
     <div class="card intro-card">
       <div class="intro">
-        <p>앞으로 해보고 싶은 것, 요즘 고민하는 것, 작아도 괜찮은 나의 다음 도전을 남겨주세요.</p>
-        <p>아직 잘 모르겠다면 <b>‘아직 찾는 중’</b>도 멋진 답이에요.</p>
+        <p><strong>마음속 도전, 오늘 한 줄로 꺼내보세요.</strong></p>
+        <p>나의 다음 도전을 남기고,<br>서로의 도전을 응원해주세요.</p>
       </div>
       <div class="cat-preview" id="cat-preview"></div>
       <button class="btn" id="start-btn" type="button">도전 남기기 ✍️</button>
@@ -319,13 +323,14 @@
 
       <div class="field">
         <label for="text-input">3. 한 줄로 적어주세요<span class="req">*</span></label>
-        <textarea id="text-input" rows="3" placeholder="먼저 위에서 도전 종류를 골라주세요"></textarea>
+        <div class="write-encouragement" id="write-encouragement"><strong>거창하지 않아도 좋아요.</strong><span>요즘 해보고 싶은 일부터 가볍게 적어주세요.</span></div>
+        <textarea id="text-input" aria-describedby="write-encouragement" rows="3" placeholder="먼저 위에서 도전 종류를 골라주세요"></textarea>
         <div class="counter" id="counter">0 / 100</div>
       </div>
 
       <button class="btn" id="send-btn" type="button" disabled>도전 올리기 🚀</button>
       <div class="status" id="status" role="alert"></div>
-      <p class="notice">닉네임과 한 줄은 행사장 화면에 공개돼요.<br>전화번호·SNS 아이디 같은 개인정보는 적지 말아주세요.</p>
+      <p class="notice"><span>닉네임과 작성 내용은 행사장 화면에 공개됩니다.</span><span>전화번호·SNS 아이디 등 개인정보는 적지 말아주세요.</span><span>욕설 및 비방 문구의 작성을 금지하며,<br>해당 게시물은 삭제 조치됩니다.</span></p>
     </div>
   </section>
 
