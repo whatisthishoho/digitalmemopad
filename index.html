@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#38B6EC" />
+<meta name="robots" content="noindex, nofollow" />
+<title>우리의 다음 도전 · D'velop 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* ====== 디자인 토큰: 시안이 나오면 이 블록만 바꾸면 된다 ====== */
+  /* 참고: D'VELOP 2026 성과소개집 표지 (하늘 + 종이비행기 + 초록 픽셀 띠 + 노랑·분홍 포인트) */
+  :root {
+    --sky: #97D3EF;
+    --sky-deep: #79C3E6;
+    --main: #4DB98C;        /* 초록 */
+    --main-dark: #3C9B74;
+    --main-soft: #E5F7EF;
+    --yellow: #FFD466;
+    --pink: #F4A4C6;
+    --navy: #3D4272;
+    --paper: #FFFFFF;
+    --bg: var(--sky);
+    --ink: #22265A;
+    --muted: #6A6F8E;
+    --line: #DCE3EE;
+    --heart: #EC70A4;
+    --ok: #4DB98C;
+    --warn: #E5484D;
+    --c1: #6B8FE6;  /* 일·공부 */
+    --c2: #4DB98C;  /* 돈·생활 */
+    --c3: #F4BB46;  /* 해보고 싶은 경험 */
+    --c4: #EC7DAE;  /* 아직 찾는 중 */
+    --radius: 20px;
+    --shadow: 0 12px 30px rgba(40, 80, 110, 0.14);
+    --font: 'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    background: linear-gradient(180deg, var(--sky) 0%, var(--sky-deep) 100%) fixed, var(--sky);
+    color: var(--ink);
+    font-family: var(--font);
+    line-height: 1.6;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+  button { font-family: inherit; }
+  .wrap { position: relative; max-width: 480px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  /* 배경 구름 (모든 화면 공통, 장식) */
+  .sky-deco { position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+  .sky-deco svg { position: absolute; opacity: .9; }
+
+  /* ====== 로고: 공식 로고 이미지가 나오면 .logo 안을 <img>로 바꾸면 된다 ====== */
+  .logo {
+    display: inline-flex; align-items: flex-start;
+    font-weight: 900; font-size: 44px; line-height: 1; letter-spacing: -0.01em; color: #fff; text-shadow: 0 1px 3px rgba(20,70,50,.35);
+  }
+  .logo .tick { width: .42em; height: .42em; margin: -.12em .02em 0 -.02em; }
+  .logo.sm { font-size: 18px; }
+
+  /* 인트로 포스터 */
+  .hero { position: relative; height: 230px; margin: 0 -16px; }
+  .hero svg { position: absolute; }
+  .hero .plane { width: 300px; left: 50%; top: 14px; transform: translateX(-46%); filter: drop-shadow(0 10px 14px rgba(10, 70, 120, .18)); animation: float 4s ease-in-out infinite; }
+  @keyframes float { 50% { transform: translateX(-46%) translateY(-8px); } }
+  .band {
+    position: relative; background: var(--main); color: #fff;
+    padding: 34px 22px 26px;
+    clip-path: polygon(0 22px, 12% 22px, 12% 10px, 26% 10px, 26% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .band .px { position: absolute; width: 18px; height: 18px; }
+  .band h1 { color: #fff; margin: 16px 0 4px; text-shadow: 0 1px 3px rgba(20,70,50,.35); }
+  .band .sub { color: #fff; margin-bottom: 0; text-shadow: 0 1px 2px rgba(20,70,50,.35); }
+  .intro-card { border-radius: 0 0 var(--radius) var(--radius) !important; }
+
+  .screen { display: none; animation: fadeUp .4s ease both; }
+  .screen.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .card {
+    background: var(--paper);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 20px 24px;
+  }
+
+  .demo-bar {
+    background: #FFF4CC; color: #7A5B00; font-size: 13px; text-align: center;
+    border-radius: 10px; padding: 8px 10px; margin-bottom: 14px; word-break: keep-all;
+  }
+
+  .eyebrow {
+    display: inline-block; font-size: 13px; font-weight: 700; color: var(--main);
+    background: var(--main-soft); border-radius: 999px; padding: 4px 12px; margin-bottom: 14px;
+  }
+  h1 { font-weight: 800; font-size: 32px; line-height: 1.25; letter-spacing: -0.03em; margin-bottom: 8px; }
+  h1 .accent { color: var(--yellow); }
+  .sub { font-weight: 600; font-size: 16px; color: var(--muted); margin-bottom: 18px; }
+  .intro p { margin-bottom: 10px; font-size: 15.5px; word-break: keep-all; }
+
+  /* 카테고리 4칸 미리보기 (인트로) */
+  .cat-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 6px; }
+  .cat-preview div {
+    border-radius: 12px; padding: 10px 12px; font-size: 14px; font-weight: 700;
+    background: color-mix(in srgb, var(--cc) 14%, white); color: color-mix(in srgb, var(--cc) 72%, black);
+  }
+
+  .btn {
+    display: block; width: 100%;
+    border: 0; border-radius: 14px;
+    padding: 16px 18px; margin-top: 14px;
+    font-weight: 700; font-size: 17px;
+    color: #fff; background: var(--main); text-shadow: 0 1px 2px rgba(20,70,50,.3);
+    box-shadow: 0 5px 0 var(--main-dark);
+    cursor: pointer; transition: transform .08s, box-shadow .08s, opacity .2s;
+  }
+  .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--main-dark); }
+  .btn:disabled { opacity: .4; cursor: default; transform: none; box-shadow: 0 5px 0 var(--main-dark); }
+  .btn.ghost { background: transparent; color: var(--main-dark); text-shadow: none; box-shadow: none; border: 1.5px solid var(--line); }
+
+  /* 입력 폼 */
+  .field { margin-bottom: 22px; }
+  .field > label, .field > .label { display: block; font-weight: 700; font-size: 16px; margin-bottom: 8px; word-break: keep-all; }
+  .req { color: var(--warn); font-size: 13px; margin-left: 4px; }
+  .opt { color: var(--muted); font-size: 13px; font-weight: 500; margin-left: 4px; }
+  .help { color: var(--muted); font-size: 13px; margin-top: 6px; word-break: keep-all; }
+  .help.err { color: var(--warn); }
+
+  .cats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cat {
+    border: 2px solid var(--line); background: #fff; border-radius: 14px;
+    padding: 14px 10px; text-align: center; cursor: pointer;
+    font-size: 15px; font-weight: 700; color: var(--ink);
+    transition: border-color .15s, background .15s, transform .1s;
+  }
+  .cat .emo { display: block; font-size: 26px; line-height: 1.2; margin-bottom: 4px; }
+  .cat:active { transform: scale(.97); }
+  .cat[aria-checked="true"] {
+    border-color: var(--cc);
+    background: color-mix(in srgb, var(--cc) 14%, white);
+    color: color-mix(in srgb, var(--cc) 72%, black);
+  }
+
+  input[type=text], textarea {
+    width: 100%;
+    font-family: inherit; font-size: 16px; color: var(--ink);
+    background: #fff; border: 1.5px solid var(--line); border-radius: 12px;
+    padding: 13px 14px; outline: none; transition: border-color .15s;
+    -webkit-appearance: none; appearance: none;
+  }
+  input:focus, textarea:focus { border-color: var(--main); }
+  textarea { min-height: 96px; resize: none; line-height: 1.6; }
+  .counter { text-align: right; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .counter.over { color: var(--warn); }
+  .status { min-height: 22px; font-size: 14px; color: var(--warn); margin-top: 10px; text-align: center; word-break: keep-all; }
+  .notice { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 14px; word-break: keep-all; }
+
+  /* 전송 중 */
+  .sending { text-align: center; padding: 48px 0 30px; }
+  .sending .rocket { width: 90px; display: inline-block; animation: launch 1.3s ease-in infinite; }
+  @keyframes launch {
+    0% { transform: translate(-20px, 14px); opacity: 1; }
+    100% { transform: translate(50px, -60px); opacity: 0; }
+  }
+  .sending p { font-weight: 700; font-size: 17px; color: var(--muted); margin-top: 22px; }
+
+  /* 완료 */
+  .done { text-align: center; }
+  .done .big { font-size: 56px; margin-bottom: 8px; animation: pop .5s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .done h2 { font-weight: 800; font-size: 24px; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .done p { font-size: 15px; color: var(--muted); word-break: keep-all; }
+
+  /* 도전 카드 (완료 미리보기 + 모아보기 공통) */
+  .dcard {
+    position: relative; text-align: left;
+    background: #fff; border-radius: 14px;
+    border-left: 6px solid var(--cc);
+    box-shadow: 0 4px 14px rgba(30, 40, 90, 0.08);
+    padding: 14px 14px 12px 16px;
+  }
+  .dcard .chip {
+    display: inline-block; font-size: 12px; font-weight: 700; color: color-mix(in srgb, var(--cc) 72%, black);
+    background: color-mix(in srgb, var(--cc) 14%, white); border-radius: 999px; padding: 2px 9px; margin-bottom: 6px;
+  }
+  .dcard .text { font-size: 16px; font-weight: 600; word-break: keep-all; overflow-wrap: anywhere; }
+  .dcard .meta { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+  .dcard .nick { font-size: 13.5px; color: var(--muted); }
+  .done .dcard { margin: 20px 0 6px; }
+
+  .heart {
+    display: inline-flex; align-items: center; gap: 5px;
+    border: 1.5px solid var(--line); background: #fff; border-radius: 999px;
+    padding: 6px 12px; font-size: 14px; font-weight: 700; color: var(--muted);
+    cursor: pointer; transition: transform .1s, background .15s, border-color .15s, color .15s;
+  }
+  .heart .h { font-size: 16px; line-height: 1; }
+  .heart:active { transform: scale(.92); }
+  .heart.on { background: #FDE6F0; border-color: var(--heart); color: var(--heart); }
+  .heart.on .h { animation: beat .4s ease; }
+  @keyframes beat { 0% { transform: scale(1); } 40% { transform: scale(1.5); } 100% { transform: scale(1); } }
+  .dcard.mine-heart { box-shadow: 0 0 0 3px var(--heart), 0 6px 18px rgba(238, 90, 154, 0.25); }
+
+  /* 모아보기 */
+  .board-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .board-head h2 { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; flex: 1; color: var(--ink); }
+  .back { border: 0; background: #fff; border-radius: 10px; padding: 8px 12px; font-size: 14px; font-weight: 700; color: var(--main-dark); box-shadow: var(--shadow); cursor: pointer; }
+  .tip {
+    background: #FFF6DC; color: #6B4A00; border-radius: 12px; border-left: 5px solid var(--yellow);
+    padding: 10px 12px; font-size: 13.5px; margin-bottom: 12px; word-break: keep-all;
+  }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 8px; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex: none; border: 1.5px solid var(--line); background: #fff; color: var(--muted);
+    border-radius: 999px; padding: 7px 13px; font-size: 13.5px; font-weight: 700; cursor: pointer;
+  }
+  .tab { border-color: transparent; }
+  .tab.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .sortbar { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--navy); font-weight: 600; margin-bottom: 10px; }
+  .sortbar button { border: 0; background: none; font-size: 13px; font-weight: 700; color: rgba(34,38,90,.55); cursor: pointer; padding: 4px 2px; }
+  .sortbar button.on { color: var(--ink); text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: 3px; text-underline-offset: 4px; }
+  .list { display: grid; gap: 10px; }
+  .empty { text-align: center; color: var(--navy); padding: 40px 0; font-size: 15px; font-weight: 600; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+    background: rgba(29, 34, 51, .92); color: #fff; font-size: 14px; border-radius: 999px;
+    padding: 10px 18px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+    max-width: calc(100% - 32px); text-align: center; word-break: keep-all;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%); }
+
+  .footer { text-align: center; color: rgba(34,38,90,.65); font-size: 12.5px; font-weight: 600; margin-top: 22px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  /* color-mix 를 모르는 옛 폰(iOS 16.1 이하 등)에서 선택한 카테고리 색이 사라지지 않게 */
+  @supports not (color: color-mix(in srgb, red 50%, white)) {
+    .cat-preview div, .dcard .chip { background: #F2F5FA; color: var(--ink); }
+    .cat[aria-checked="true"] { background: #F2F5FA; color: var(--ink); border-width: 3px; }
+  }
+</style>
+</head>
+<body>
+<!-- 그림 조각 (종이비행기·구름·로고 화살표·화살표 장식) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plane" viewBox="0 0 320 240">
+    <polygon points="312,6 16,100 118,132" fill="#fff"/>
+    <polygon points="312,6 118,132 152,232" fill="#F2F9FE"/>
+    <polygon points="118,132 152,232 160,150" fill="#D3EAF7"/>
+    <line x1="312" y1="6" x2="118" y2="132" stroke="#CFE6F4" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-cloud" viewBox="0 0 120 64">
+    <circle cx="36" cy="40" r="20" fill="#fff"/><circle cx="62" cy="30" r="26" fill="#fff"/>
+    <circle cx="90" cy="42" r="18" fill="#fff"/><rect x="16" y="40" width="92" height="22" rx="11" fill="#fff"/>
+  </symbol>
+  <symbol id="i-tick" viewBox="0 0 24 24">
+    <path d="M4 20 L16 8" stroke="#FFC94A" stroke-width="4.5" stroke-linecap="round"/>
+    <polygon points="9,3 21,3 21,15" fill="#FFC94A"/>
+  </symbol>
+  <symbol id="i-ff" viewBox="0 0 46 34">
+    <polygon points="0,2 21,17 0,32"/><polygon points="22,2 43,17 22,32"/>
+  </symbol>
+</svg>
+
+<div class="sky-deco" aria-hidden="true">
+  <svg viewBox="0 0 120 64" style="width:110px;left:-24px;top:38%"><use href="#i-cloud"/></svg>
+  <svg viewBox="0 0 120 64" style="width:130px;right:-30px;top:64%"><use href="#i-cloud"/></svg>
+  <svg viewBox="0 0 120 64" style="width:80px;right:8%;top:88%;opacity:.6"><use href="#i-cloud"/></svg>
+</div>
+
+<div class="wrap">
+  <div class="demo-bar" id="demo-bar" hidden>👀 미리보기 모드 · 예시 카드로 동작해요 (서버 연결 전)</div>
+
+  <!-- 1. 인트로 -->
+  <section id="intro-screen" class="screen active" aria-labelledby="intro-title">
+    <div class="hero" aria-hidden="true">
+      <svg viewBox="0 0 120 64" style="width:92px;left:14px;top:6px"><use href="#i-cloud"/></svg>
+      <svg viewBox="0 0 46 34" style="width:40px;right:22%;top:4px;fill:var(--yellow);transform:rotate(-15deg)"><use href="#i-ff"/></svg>
+      <svg class="plane" viewBox="0 0 320 240"><use href="#i-plane"/></svg>
+      <svg viewBox="0 0 46 34" style="width:58px;left:8px;top:150px;fill:var(--pink);transform:rotate(200deg)"><use href="#i-ff"/></svg>
+      <svg viewBox="0 0 120 64" style="width:104px;right:-8px;top:150px"><use href="#i-cloud"/></svg>
+    </div>
+    <div class="band">
+      <span class="px" style="right:0;top:0;background:var(--yellow)"></span>
+      <span class="px" style="right:18px;top:0;background:var(--yellow)"></span>
+      <span class="px" style="right:0;top:18px;background:var(--pink)"></span>
+      <div class="logo" role="img" aria-label="D'VELOP">D<svg class="tick" viewBox="0 0 24 24"><use href="#i-tick"/></svg>VELOP</div>
+      <h1 id="intro-title">우리의 <span class="accent">다음 도전</span></h1>
+      <div class="sub">2026 · 소모임 네트워킹 · 한 줄이면 충분해요</div>
+    </div>
+    <div class="card intro-card">
+      <div class="intro">
+        <p>앞으로 해보고 싶은 것, 요즘 고민하는 것, 작아도 괜찮은 나의 다음 도전을 남겨주세요.</p>
+        <p>아직 잘 모르겠다면 <b>‘아직 찾는 중’</b>도 멋진 답이에요.</p>
+      </div>
+      <div class="cat-preview" id="cat-preview"></div>
+      <button class="btn" id="start-btn" type="button">도전 남기기 ✍️</button>
+      <button class="btn ghost" id="intro-board-btn" type="button">모두의 도전 보기 ❤️</button>
+    </div>
+  </section>
+
+  <!-- 2. 작성 -->
+  <section id="write-screen" class="screen" aria-labelledby="write-title">
+    <div class="card">
+      <span class="eyebrow" id="write-title">✍️ 나의 다음 도전</span>
+
+      <div class="field">
+        <div class="label" id="cat-label">1. 어떤 도전인가요?<span class="req">*</span></div>
+        <div class="cats" id="cats" role="radiogroup" aria-labelledby="cat-label"></div>
+      </div>
+
+      <div class="field">
+        <label for="nick-input">2. 닉네임<span class="opt">(선택 · 비우면 ‘익명’)</span></label>
+        <input type="text" id="nick-input" maxlength="10" placeholder="예) 별빛여행자" autocomplete="off" />
+        <p class="help" id="nick-help">한글만, 10자 이내 · 실명도 익명도 자유예요</p>
+      </div>
+
+      <div class="field">
+        <label for="text-input">3. 한 줄로 적어주세요<span class="req">*</span></label>
+        <textarea id="text-input" rows="3" placeholder="먼저 위에서 도전 종류를 골라주세요"></textarea>
+        <div class="counter" id="counter">0 / 100</div>
+      </div>
+
+      <button class="btn" id="send-btn" type="button" disabled>도전 올리기 🚀</button>
+      <div class="status" id="status" role="alert"></div>
+      <p class="notice">닉네임과 한 줄은 행사장 화면에 공개돼요.<br>전화번호·SNS 아이디 같은 개인정보는 적지 말아주세요.</p>
+    </div>
+  </section>
+
+  <!-- 3. 전송 중 -->
+  <section id="sending-screen" class="screen" aria-live="polite">
+    <div class="card sending">
+      <svg class="rocket" viewBox="0 0 320 240" aria-hidden="true" style="filter:drop-shadow(0 4px 6px rgba(30,154,214,.35))"><use href="#i-plane"/></svg>
+      <p>도전을 올리고 있어요...</p>
+    </div>
+  </section>
+
+  <!-- 4. 완료 -->
+  <section id="done-screen" class="screen" aria-live="polite">
+    <div class="card done">
+      <div class="big" aria-hidden="true">🎉</div>
+      <h2>도전이 올라갔어요!</h2>
+      <p>곧 행사장 화면에 나타나요.<br>다른 친구들의 도전도 구경해 볼까요?</p>
+      <div id="my-card"></div>
+      <button class="btn" id="done-board-btn" type="button">모두의 도전 보러 가기 ❤️</button>
+      <button class="btn ghost" id="again-btn" type="button">하나 더 남기기</button>
+    </div>
+  </section>
+
+  <!-- 5. 모두의 도전 (하트) -->
+  <section id="board-screen" class="screen" aria-labelledby="board-title">
+    <div class="board-head">
+      <button class="back" id="board-back" type="button">← 처음</button>
+      <h2 id="board-title">모두의 도전</h2>
+    </div>
+    <div class="tip">❤️ 하트는 <b>1개</b>! 가장 응원하고 싶은 도전에 눌러주세요.<br>다른 카드를 누르면 하트가 옮겨가요.</div>
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div class="sortbar">
+      <span id="board-count">0개</span>
+      <span><button type="button" id="sort-new" class="on">최신순</button> · <button type="button" id="sort-heart">하트순</button></span>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <p class="footer">함께일하는재단</p>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+  // ====== 설정 ======
+  var APPS_SCRIPT_URL = "";   // ← Apps Script 웹앱 배포 URL(/exec 로 끝나는 주소). 비워두면 예시 카드로 동작하는 미리보기 모드
+  var CATEGORIES = [
+    { name: "일·공부", emoji: "💼", color: "var(--c1)", hint: "예) 자격증 하나 따기 📚" },
+    { name: "돈·생활", emoji: "💰", color: "var(--c2)", hint: "예) 비상금 100만원 모으기 💪" },
+    { name: "해보고 싶은 경험", emoji: "✈️", color: "var(--c3)", hint: "예) 혼자 해외여행 가보기 🌏" },
+    { name: "아직 찾는 중", emoji: "🔍", color: "var(--c4)", hint: "예) 나한테 맞는 걸 천천히 찾아볼래요 🌱" }
+  ];
+  var MAX_TEXT = 100;
+  var MAX_NICK = 10;
+  var NICK_RE = /^[가-힣]+$/;
+  var DRAFT_KEY = "develop_challenge_draft_v1";
+  var OUTBOX_KEY = "develop_challenge_outbox_v1";
+  var DEVICE_KEY = "develop_challenge_device_v1";
+  var DEMO_KEY = "develop_challenge_demo_v2";
+  var POLL_MS = 10000;        // + 무작위 0~4초 (많은 폰이 같은 순간에 몰리지 않게)
+  var POST_TIMEOUT_MS = 15000; // 응답이 없으면 끊고 다시 시도 (전송 화면에 갇히지 않게)
+  var HEART_HOLD_MS = 30000;   // 방금 누른 하트는 이 시간 동안 서버 목록보다 이 폰의 값을 우선
+  var DEMO = !APPS_SCRIPT_URL;
+
+  // ====== 필터: 서버(Code.gs)와 같은 목록. 서버의 '금지어' 탭 단어는 접속 시 받아와 더한다 ======
+  var words = [
+    "씨발", "시발", "씨바", "ㅅㅂ", "ㅆㅂ", "병신", "븅신", "ㅂㅅ", "개새끼", "새끼", "좆", "존나", "졸라", "ㅈㄴ",
+    "지랄", "ㅈㄹ", "꺼져", "닥쳐", "미친놈", "미친년", "또라이", "니애미", "느금마", "니미", "염병", "썅", "엿먹",
+    "fuck", "shit", "bitch"
+  ];
+  var PRIVACY_PATTERNS = [
+    /[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/,
+    /01[016789][\s.\-]?\d{3,4}[\s.\-]?\d{4}/,
+    /0\d{1,2}[\s.\-]\d{3,4}[\s.\-]\d{4}/,
+    /\d{6}[\s\-]?[1-4]\d{6}/,
+    /\b(?!(?:19|20)\d\d-\d\d?-\d\d?\b)\d{2,6}-\d{2,6}-\d{2,8}/,
+    /\d{9,}/,
+    /@[A-Za-z0-9_.]{3,}/
+  ];
+  function wordRegex(word) {
+    return new RegExp(word.split("").map(function (ch) {
+      return ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }).join("[\\s.,·_*~!\\-]*"), "i");
+  }
+  // "privacy" / "word" / "" 를 돌려준다
+  function checkText(s) {
+    if (PRIVACY_PATTERNS.some(function (re) { return re.test(s); })) return "privacy";
+    if (words.some(function (w) { return wordRegex(w).test(s); })) return "word";
+    return "";
+  }
+
+  // ====== 저장소: 사파리 사생활 보호 모드 등에서 막혀도 페이지는 동작하도록 감싼다 ======
+  function storeGet(key, fallback) {
+    try {
+      var v = JSON.parse(window.localStorage.getItem(key));
+      return v == null ? fallback : v;
+    } catch (_) { return fallback; }
+  }
+  function storeSet(key, value) {
+    try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
+  }
+  function newId() {
+    try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (_) {}
+    return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+  }
+  // 로그인 없이 '폰 1대 = 하트 1개'를 지키기 위한 기기번호 (개인정보 아님)
+  var deviceId = storeGet(DEVICE_KEY, "");
+  if (!deviceId) { deviceId = newId(); storeSet(DEVICE_KEY, deviceId); }
+
+  function catOf(name) {
+    for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].name === name) return CATEGORIES[i];
+    return CATEGORIES[CATEGORIES.length - 1];
+  }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  // ====== 서버 통신 ======
+  // 조회: JSONP (CORS 우회)
+  function jsonp(params) {
+    return new Promise(function (resolve, reject) {
+      var cb = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 1e6);
+      var script = document.createElement("script");
+      var timer = setTimeout(function () { done(); reject(new Error("timeout")); }, 15000);
+      function done() { clearTimeout(timer); window[cb] = function () {}; script.remove(); }
+      window[cb] = function (data) { done(); resolve(data); };
+      script.onerror = function () { done(); reject(new Error("load")); };
+      var q = Object.keys(params).map(function (k) {
+        return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]);
+      }).join("&");
+      script.src = APPS_SCRIPT_URL + "?" + q + "&callback=" + cb + "&_=" + Date.now();
+      document.body.appendChild(script);
+    });
+  }
+
+  // 저장: text/plain POST 로 preflight 없이 보낸다
+  async function postOnce(body) {
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, POST_TIMEOUT_MS) : 0;
+    var res, raw;
+    try {
+      res = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(body),
+        signal: ctrl ? ctrl.signal : undefined
+      });
+      raw = await res.text();
+    } finally {
+      clearTimeout(timer);
+    }
+    var data = null;
+    try { data = JSON.parse(raw); } catch (_) { data = null; }
+    if (res.ok && data && data.status === "ok") return { ok: true, data: data };
+    var reason;
+    if (data && data.message) reason = data.message;
+    // 배포 권한이 '모든 사용자'가 아니거나, 동시 접속이 한도를 넘으면 HTML 페이지가 돌아온다
+    else if (/<html|<!doctype/i.test(raw)) reason = "서버 혼잡 또는 접근 권한 설정 확인 필요";
+    else reason = "HTTP " + res.status;
+    // 'error' 만 입력값 문제. busy·retry(혼잡·일시 오류)는 카드를 버리지 않고 다시 시도한다
+    return { ok: false, reason: reason, fatal: !!(data && data.status === "error") };
+  }
+
+  // 콜드 스타트·혼잡에 대비해 점점 길게, 폰마다 조금씩 엇갈리게 기다리며 최대 3번 시도한다
+  async function postWithRetry(body) {
+    var delays = [0, 2000, 5000];
+    var last = { ok: false, reason: "" };
+    for (var i = 0; i < delays.length; i++) {
+      if (delays[i]) await sleep(delays[i] + Math.random() * 1500);
+      try { last = await postOnce(body); }
+      catch (err) { last = { ok: false, reason: err && err.name === "AbortError" ? "서버 응답 지연" : "네트워크 연결 확인 필요" }; }
+      if (last.ok || last.fatal) return last;   // 입력값 오류는 재시도해도 같으므로 멈춘다
+    }
+    return last;
+  }
+
+  // ====== 미리보기 모드: 서버 대신 이 브라우저에 예시 카드를 두고 똑같이 동작시킨다 ======
+  // 예시 카드: 지금은 비워 둠 (직접 쓴 카드만 보이게). 필요하면 ["카테고리", "닉네임", "한 줄", 하트수] 형식으로 추가
+  var SAMPLE = [];
+  function demoStore() {
+    var s = storeGet(DEMO_KEY, null);
+    if (!s) {
+      s = { cards: SAMPLE.map(function (r, i) {
+        return { id: "demo" + i, category: r[0], nick: r[1], text: r[2], base: r[3] };
+      }), hearts: {} };
+      storeSet(DEMO_KEY, s);
+    }
+    return s;
+  }
+  function demoCards() {
+    var s = demoStore();
+    var counts = {};
+    Object.keys(s.hearts).forEach(function (d) { var c = s.hearts[d]; if (c) counts[c] = (counts[c] || 0) + 1; });
+    return s.cards.map(function (c) {
+      return { id: c.id, category: c.category, nick: c.nick, text: c.text, hearts: (c.base || 0) + (counts[c.id] || 0) };
+    });
+  }
+
+  var api = {
+    loadConfig: async function () {
+      if (DEMO) return;
+      try {
+        var d = await jsonp({ action: "config" });
+        (d.words || []).forEach(function (w) { if (words.indexOf(w) < 0) words.push(w); });
+      } catch (_) {}
+    },
+    loadCards: async function () {
+      if (DEMO) return { cards: demoCards(), myHeart: demoStore().hearts[deviceId] || "" };
+      return await jsonp({ action: "cards", device: deviceId });
+    },
+    addCard: async function (card) {
+      if (DEMO) {
+        await sleep(600);
+        var s = demoStore();
+        if (!s.cards.some(function (c) { return c.id === card.id; })) {
+          s.cards.push({ id: card.id, category: card.category, nick: card.nick || "익명", text: card.text, base: 0 });
+          storeSet(DEMO_KEY, s);
+        }
+        return { ok: true };
+      }
+      return await postWithRetry(Object.assign({ action: "card" }, card));
+    },
+    heart: async function (cardId) {
+      if (DEMO) {
+        await sleep(250);
+        var s = demoStore();
+        s.hearts[deviceId] = cardId;
+        storeSet(DEMO_KEY, s);
+        return { ok: true, data: {} };
+      }
+      return await postWithRetry({ action: "heart", device: deviceId, cardId: cardId });
+    }
+  };
+
+  // ====== 화면 전환 ======
+  var screens = {};
+  ["intro", "write", "sending", "done", "board"].forEach(function (k) {
+    screens[k] = document.getElementById(k + "-screen");
+  });
+  var current = "intro";
+  function showScreen(name) {
+    Object.keys(screens).forEach(function (k) { screens[k].classList.remove("active"); });
+    screens[name].classList.add("active");
+    current = name;
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (_) { window.scrollTo(0, 0); }
+    if (name === "board") refreshBoard();
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    var el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove("show"); }, 2200);
+  }
+
+  // ====== 작성 화면 ======
+  var catsEl = document.getElementById("cats");
+  var nickInput = document.getElementById("nick-input");
+  var nickHelp = document.getElementById("nick-help");
+  var textInput = document.getElementById("text-input");
+  var counter = document.getElementById("counter");
+  var sendBtn = document.getElementById("send-btn");
+  var statusEl = document.getElementById("status");
+  var selectedCat = "";
+  var sending = false;
+
+  CATEGORIES.forEach(function (c) {
+    var p = document.createElement("div");
+    p.style.setProperty("--cc", c.color);
+    p.textContent = c.emoji + " " + c.name;
+    document.getElementById("cat-preview").appendChild(p);
+
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "cat";
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", "false");
+    b.style.setProperty("--cc", c.color);
+    var emo = document.createElement("span");
+    emo.className = "emo";
+    emo.textContent = c.emoji;
+    b.appendChild(emo);
+    b.appendChild(document.createTextNode(c.name));
+    b.addEventListener("click", function () { selectCat(c.name); saveDraft(); });
+    catsEl.appendChild(b);
+  });
+
+  function selectCat(name) {
+    selectedCat = name;
+    Array.prototype.forEach.call(catsEl.children, function (b, i) {
+      b.setAttribute("aria-checked", CATEGORIES[i].name === name ? "true" : "false");
+    });
+    textInput.placeholder = name ? catOf(name).hint : "먼저 위에서 도전 종류를 골라주세요";
+    updateSendState();
+  }
+
+  // 입력 중(자음·모음 조합 중)엔 넘어가고, 한글이 아닌 글자가 들어왔을 때만 바로 알려준다
+  function nickProblem(final) {
+    var v = nickInput.value.trim();
+    if (!v) return "";
+    if (/[^가-힣ㄱ-ㅎㅏ-ㅣ]/.test(v)) return "닉네임은 한글만 쓸 수 있어요 (띄어쓰기·영문·숫자·이모지 X)";
+    if (v.length > MAX_NICK) return "닉네임은 " + MAX_NICK + "자 이내로 적어주세요";
+    if (final && !NICK_RE.test(v)) return "닉네임을 완성된 글자로 적어주세요 (예: ㅋㅋ → 크크)";
+    return "";
+  }
+
+  function updateSendState() {
+    var len = textInput.value.length;
+    counter.textContent = len + " / " + MAX_TEXT;
+    counter.classList.toggle("over", len > MAX_TEXT);
+    var np = nickProblem(false);
+    nickHelp.textContent = np || "한글만, 10자 이내 · 실명도 익명도 자유예요";
+    nickHelp.classList.toggle("err", !!np);
+    sendBtn.disabled = sending || !selectedCat || !textInput.value.trim() || len > MAX_TEXT || !!np;
+  }
+
+  function saveDraft() {
+    storeSet(DRAFT_KEY, { category: selectedCat, nick: nickInput.value, text: textInput.value });
+  }
+  function restoreDraft() {
+    var d = storeGet(DRAFT_KEY, null);
+    if (d) {
+      nickInput.value = d.nick || "";
+      textInput.value = d.text || "";
+      if (d.category) selectCat(d.category);
+    }
+    updateSendState();
+  }
+
+  // ====== 보낼 카드함: 전송 전에 먼저 폰에 보관 → 성공하면 지운다 ======
+  function outboxAdd(card) {
+    var box = storeGet(OUTBOX_KEY, []);
+    if (!box.some(function (c) { return c.id === card.id; })) box.push(card);
+    storeSet(OUTBOX_KEY, box);
+  }
+  function outboxRemove(id) {
+    storeSet(OUTBOX_KEY, storeGet(OUTBOX_KEY, []).filter(function (c) { return c.id !== id; }));
+  }
+  // 지난번에 못 보낸 카드가 있으면 조용히 다시 보낸다 (같은 카드번호는 서버가 중복 저장하지 않음)
+  var flushing = false;
+  async function flushOutbox() {
+    if (DEMO || flushing) return;
+    flushing = true;
+    try {
+      var box = storeGet(OUTBOX_KEY, []);
+      for (var i = 0; i < box.length; i++) {
+        var r = await api.addCard(box[i]);
+        if (r.ok || r.fatal) outboxRemove(box[i].id);
+      }
+    } finally {
+      flushing = false;
+    }
+  }
+
+  async function send() {
+    if (sendBtn.disabled) return;
+    statusEl.textContent = "";
+    var nick = nickInput.value.trim();
+    var text = textInput.value.trim();
+
+    var np = nickProblem(true);
+    if (np) { statusEl.textContent = np; return; }
+    var problem = checkText(text) || checkText(nick);
+    if (problem === "privacy") { statusEl.textContent = "전화번호·이메일·SNS 아이디 같은 개인정보는 빼고 적어주세요 🙏"; return; }
+    if (problem === "word") { statusEl.textContent = "사용할 수 없는 말이 있어요. 고운 말로 수정해주세요 🙏"; return; }
+
+    // 실패 후 같은 내용을 다시 누르면 같은 카드번호를 써서 서버에서 중복 저장되지 않게 한다
+    var pending = storeGet(OUTBOX_KEY, []).filter(function (c) {
+      return c.category === selectedCat && c.nick === nick && c.text === text;
+    })[0];
+    var card = { id: pending ? pending.id : newId(), category: selectedCat, nick: nick, text: text };
+
+    sending = true;
+    updateSendState();
+    // 실패한 뒤 내용을 고쳐 다시 보내면 고치기 전 카드는 버린다 (다음 접속 때 옛 카드가 몰래 올라가지 않게)
+    storeSet(OUTBOX_KEY, storeGet(OUTBOX_KEY, []).filter(function (c) { return c.id === card.id; }));
+    outboxAdd(card);
+    showScreen("sending");
+    var started = Date.now();
+    var result = await api.addCard(card);
+    var wait = 1300 - (Date.now() - started);   // 애니메이션이 한 번은 보이도록
+    if (wait > 0) await sleep(wait);
+    sending = false;
+
+    if (result.ok) {
+      outboxRemove(card.id);
+      textInput.value = "";
+      saveDraft();   // 카테고리·닉네임은 남겨 '하나 더 남기기'가 편하도록
+      var mine = document.getElementById("my-card");
+      mine.innerHTML = "";
+      mine.appendChild(cardEl({ id: card.id, category: card.category, nick: card.nick || "익명", text: card.text }, false));
+      showScreen("done");
+    } else {
+      if (result.fatal) outboxRemove(card.id);
+      showScreen("write");
+      statusEl.textContent = result.fatal
+        ? "올릴 수 없는 내용이에요. (" + result.reason + ")"
+        : "전송이 늦어지고 있어요. 내용은 이 폰에 보관해 두었으니 버튼을 한 번 더 눌러주세요. (" + result.reason + ")";
+    }
+    updateSendState();
+  }
+
+  // ====== 도전 카드 그리기 (완료 화면·모아보기 공통) ======
+  function cardEl(c, withHeart) {
+    var cat = catOf(c.category);
+    var el = document.createElement("article");
+    el.className = "dcard";
+    el.style.setProperty("--cc", cat.color);
+    var chip = document.createElement("span");
+    chip.className = "chip";
+    chip.textContent = cat.emoji + " " + cat.name;
+    var text = document.createElement("div");
+    text.className = "text";
+    text.textContent = c.text;
+    var meta = document.createElement("div");
+    meta.className = "meta";
+    var nick = document.createElement("span");
+    nick.className = "nick";
+    nick.textContent = "— " + c.nick;
+    meta.appendChild(nick);
+    if (withHeart) {
+      var mineHeart = board.myHeart === c.id;
+      el.classList.toggle("mine-heart", mineHeart);
+      var h = document.createElement("button");
+      h.type = "button";
+      h.className = "heart" + (mineHeart ? " on" : "");
+      h.setAttribute("aria-pressed", mineHeart ? "true" : "false");
+      h.setAttribute("aria-label", "하트 " + c.hearts + "개" + (mineHeart ? ", 내가 누름" : ""));
+      var icon = document.createElement("span");
+      icon.className = "h";
+      icon.textContent = mineHeart ? "❤️" : "🤍";
+      h.appendChild(icon);
+      h.appendChild(document.createTextNode(String(c.hearts)));
+      h.addEventListener("click", function () { toggleHeart(c.id); });
+      meta.appendChild(h);
+    }
+    el.appendChild(chip);
+    el.appendChild(text);
+    el.appendChild(meta);
+    return el;
+  }
+
+  // ====== 모아보기 + 하트 ======
+  // loading: 목록 요청 중 (응답이 느릴 때 요청이 겹겹이 쌓이지 않게)
+  // seq: 하트를 누를 때마다 +1 → 누르기 전에 출발한 목록 응답은 버린다
+  // local: 방금 누른 하트 { id, until } (서버 목록은 몇 초 늦게 갱신될 수 있음)
+  var board = { cards: [], myHeart: "", tab: "전체", sort: "new", busy: false, loading: false, seq: 0, local: null };
+  var listEl = document.getElementById("list");
+  var tabsEl = document.getElementById("tabs");
+
+  ["전체"].concat(CATEGORIES.map(function (c) { return c.name; })).forEach(function (name) {
+    var t = document.createElement("button");
+    t.type = "button";
+    t.className = "tab" + (name === "전체" ? " on" : "");
+    t.setAttribute("role", "tab");
+    t.textContent = name === "전체" ? "전체" : catOf(name).emoji + " " + name;
+    t.addEventListener("click", function () {
+      board.tab = name;
+      Array.prototype.forEach.call(tabsEl.children, function (x) { x.classList.toggle("on", x === t); });
+      renderBoard();
+    });
+    tabsEl.appendChild(t);
+  });
+  function setSort(s) {
+    board.sort = s;
+    document.getElementById("sort-new").classList.toggle("on", s === "new");
+    document.getElementById("sort-heart").classList.toggle("on", s === "heart");
+    renderBoard();
+  }
+
+  function renderBoard() {
+    var cards = board.cards.filter(function (c) { return board.tab === "전체" || c.category === board.tab; });
+    cards = cards.map(function (c, i) { return { c: c, i: i }; });
+    cards.sort(function (a, b) {
+      if (board.sort === "heart" && b.c.hearts !== a.c.hearts) return b.c.hearts - a.c.hearts;
+      return b.i - a.i;   // 최신순 (시트 아래쪽이 최신)
+    });
+    document.getElementById("board-count").textContent = cards.length + "개의 도전";
+    listEl.innerHTML = "";
+    if (!cards.length) {
+      var e = document.createElement("div");
+      e.className = "empty";
+      e.textContent = "아직 올라온 도전이 없어요. 첫 번째 주인공이 되어주세요! ✨";
+      listEl.appendChild(e);
+      return;
+    }
+    cards.forEach(function (x) { listEl.appendChild(cardEl(x.c, true)); });
+  }
+
+  async function refreshBoard() {
+    if (board.busy || board.loading) return;
+    board.loading = true;
+    var seq = board.seq;
+    try {
+      var d = await api.loadCards();
+      // 하트 전송 중이거나, 요청 뒤에 하트를 눌렀다면 옛 목록이므로 버린다
+      if (board.busy || seq !== board.seq || !d || !d.cards) return;
+      board.cards = d.cards;
+      board.myHeart = d.myHeart || "";
+      applyLocalHeart();
+      renderBoard();
+    } catch (_) {
+      if (!board.cards.length) {
+        listEl.innerHTML = "";
+        var e = document.createElement("div");
+        e.className = "empty";
+        e.textContent = "목록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.";
+        listEl.appendChild(e);
+      }
+    } finally {
+      board.loading = false;
+    }
+  }
+
+  // 서버는 몇 초 단위로 목록을 캐시하므로, 방금 누른 하트가 서버 목록에 아직 없으면 이 폰의 값으로 덮는다
+  function applyLocalHeart() {
+    var l = board.local;
+    if (!l || Date.now() > l.until || board.myHeart === l.id) return;
+    if (board.myHeart) bump(board.myHeart, -1);
+    if (l.id) bump(l.id, +1);
+    board.myHeart = l.id;
+  }
+
+  function bump(id, delta) {
+    board.cards.forEach(function (c) { if (c.id === id) c.hearts = Math.max(0, c.hearts + delta); });
+  }
+
+  // 하트는 1개: 같은 카드를 다시 누르면 취소, 다른 카드를 누르면 옮긴다
+  async function toggleHeart(id) {
+    if (board.busy) return;
+    var prev = board.myHeart;
+    var next = prev === id ? "" : id;
+    board.busy = true;
+    board.seq++;
+    if (prev) bump(prev, -1);
+    if (next) bump(next, +1);
+    board.myHeart = next;
+    renderBoard();
+    toast(!next ? "하트를 취소했어요" : prev ? "하트를 옮겼어요 ❤️" : "하트를 보냈어요 ❤️");
+
+    var r = await api.heart(next);
+    board.busy = false;
+    if (r.ok) {
+      board.local = { id: next, until: Date.now() + HEART_HOLD_MS };
+      var counts = r.data && r.data.hearts;
+      if (counts) board.cards.forEach(function (c) { c.hearts = counts[c.id] || 0; });
+      renderBoard();
+    } else {
+      if (next) bump(next, -1);
+      if (prev) bump(prev, +1);
+      board.myHeart = prev;
+      renderBoard();
+      toast("하트를 보내지 못했어요. 다시 눌러주세요 (" + r.reason + ")");
+    }
+  }
+
+  // ====== 이벤트 연결 ======
+  document.getElementById("start-btn").addEventListener("click", function () { showScreen("write"); });
+  document.getElementById("intro-board-btn").addEventListener("click", function () { showScreen("board"); });
+  document.getElementById("done-board-btn").addEventListener("click", function () { showScreen("board"); });
+  document.getElementById("board-back").addEventListener("click", function () { showScreen("intro"); });
+  document.getElementById("again-btn").addEventListener("click", function () {
+    statusEl.textContent = "";
+    showScreen("write");
+    textInput.focus();
+  });
+  document.getElementById("sort-new").addEventListener("click", function () { setSort("new"); });
+  document.getElementById("sort-heart").addEventListener("click", function () { setSort("heart"); });
+  sendBtn.addEventListener("click", send);
+  [nickInput, textInput].forEach(function (el) {
+    el.addEventListener("input", function () { saveDraft(); updateSendState(); });
+  });
+  // 한 줄 입력: 엔터로 줄바꿈하지 않는다
+  // 한글 조합 중 엔터는 건드리지 않는다 (마지막 글자가 다음 칸에 한 번 더 찍히는 문제 방지)
+  function composing(e) { return e.isComposing || e.keyCode === 229; }
+  textInput.addEventListener("keydown", function (e) { if (e.key === "Enter" && !composing(e)) e.preventDefault(); });
+  nickInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !composing(e)) { e.preventDefault(); textInput.focus(); }
+  });
+  // 붙여넣기 등으로 들어온 줄바꿈은 공백으로 바꾼다
+  textInput.addEventListener("input", function () {
+    if (/[\r\n]/.test(textInput.value)) textInput.value = textInput.value.replace(/[\r\n]+/g, " ");
+  });
+  // 모아보기를 보고 있는 동안만 주기적으로 새로고침 (폰마다 간격을 조금씩 달리해 요청이 한순간에 몰리지 않게)
+  (function poll() {
+    setTimeout(function () {
+      if (current === "board" && !document.hidden) refreshBoard();
+      poll();
+    }, POLL_MS + Math.random() * 4000);
+  })();
+  // 다른 앱에 갔다가 돌아오면 바로 새로고침
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && current === "board") refreshBoard();
+  });
+  // 끊겼던 인터넷이 다시 연결되면 못 보낸 카드를 보낸다
+  window.addEventListener("online", flushOutbox);
+
+  if (DEMO) document.getElementById("demo-bar").hidden = false;
+  // 쓰던 글이 있으면 인트로를 건너뛰고 바로 작성 화면으로
+  (function () {
+    var d = storeGet(DRAFT_KEY, null);
+    if (d && d.text && d.text.trim()) showScreen("write");
+  })();
+  restoreDraft();
+  api.loadConfig();
+  flushOutbox();
+</script>
+</body>
+</html>

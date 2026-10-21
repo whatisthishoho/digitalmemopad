@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>우리의 다음 도전 · 메인 화면</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* ====== 디자인 토큰: 시안이 나오면 이 블록만 바꾸면 된다 ====== */
+  /* 참고: D'VELOP 2026 성과소개집 표지 (하늘 + 종이비행기 + 초록 픽셀 띠 + 노랑·분홍 포인트) */
+  :root {
+    --sky: #97D3EF;
+    --sky-deep: #79C3E6;
+    --green: #4DB98C;
+    --yellow: #FFD466;
+    --pink: #F4A4C6;
+    --navy: #3D4272;
+    --ink: #22265A;
+    --muted: #6A6F8E;
+    --heart: #EC70A4;
+    --gold: #FFCB50;
+    --c1: #6B8FE6;  /* 일·공부 */
+    --c2: #4DB98C;  /* 돈·생활 */
+    --c3: #F4BB46;  /* 해보고 싶은 경험 */
+    --c4: #EC7DAE;  /* 아직 찾는 중 */
+    --font: 'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    position: relative;
+    font-family: var(--font);
+    color: #fff;
+    background: linear-gradient(180deg, var(--sky) 0%, var(--sky-deep) 100%);
+    display: flex; flex-direction: column;
+    padding: 2.2vh 2vw 0;
+  }
+  body > * { position: relative; z-index: 1; }
+  .sky-deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .sky-deco svg { position: absolute; }
+
+  /* ====== 상단 ====== */
+  header { display: flex; align-items: center; justify-content: space-between; gap: 2vw; margin-bottom: 2.2vh; }
+  .brand { display: flex; align-items: center; gap: 1.6vw; }
+  /* 로고: 공식 로고 이미지가 나오면 .logo 안을 <img>로 바꾸면 된다 */
+  .logo {
+    display: inline-flex; align-items: flex-start; flex: none;
+    font-weight: 900; font-size: clamp(30px, 3.4vw, 68px); line-height: 1; letter-spacing: -0.01em; color: #fff;
+    text-shadow: 0 2px 6px rgba(30, 60, 100, .35);
+  }
+  .logo .tick { width: .42em; height: .42em; margin: -.12em .02em 0 -.02em; }
+  .divider { width: 3px; align-self: stretch; background: rgba(255,255,255,.5); border-radius: 2px; }
+  .eyebrow { font-size: clamp(13px, 1vw, 20px); font-weight: 700; color: var(--navy); letter-spacing: 0.02em; margin-bottom: 0.3vh; }
+  h1 { font-size: clamp(26px, 2.7vw, 56px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); }
+  h1 .accent { color: var(--ink); background: linear-gradient(transparent 58%, var(--yellow) 58%); padding: 0 .08em; }
+  .stats { display: flex; align-items: center; justify-content: flex-end; gap: 0.8vw; font-size: clamp(14px, 1.15vw, 22px); font-weight: 700; }
+  .stats > span { background: #fff; color: var(--ink); border-radius: 999px; padding: 0.3em 0.9em; box-shadow: 0 4px 12px rgba(10, 70, 120, .18); }
+  .stats .num { font-size: 1.3em; font-weight: 900; }
+  .live { display: inline-flex; align-items: center; gap: 0.5vw; color: var(--green); }
+  .live i { width: 0.7vw; height: 0.7vw; min-width: 10px; min-height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px 2px rgba(11,170,116,.5); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .35; transform: scale(.7); } }
+  .live.off { color: #C0504D; }
+  .live.off i { background: #C0504D; box-shadow: none; animation: none; }
+  .join { font-size: clamp(12px, 0.95vw, 18px); color: var(--navy); font-weight: 700; margin-top: 0.8vh; }
+
+  /* ====== 4칸 ====== */
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2vw; }
+  .col {
+    min-height: 0; display: flex; flex-direction: column;
+    background: rgba(255,255,255,0.32);
+    border: 2px solid rgba(255,255,255,0.7);
+    border-radius: 22px;
+    overflow: hidden;
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  }
+  .col-head {
+    display: flex; align-items: center; gap: 0.6vw;
+    padding: 1.6vh 1.1vw;
+    background: var(--cc); color: var(--ink);
+    font-size: clamp(16px, 1.45vw, 30px); font-weight: 800; letter-spacing: -0.02em;
+  }
+  .col-head .emo { font-size: 1.2em; }
+  .col-head .cnt { margin-left: auto; font-size: 0.75em; background: rgba(255,255,255,0.3); border-radius: 999px; padding: 0.2em 0.7em; }
+  .col-body {
+    flex: 1; min-height: 0; overflow: hidden;
+    padding: 1.4vh 0.9vw 3vh;
+    display: flex; flex-direction: column; gap: 1.2vh;
+    mask-image: linear-gradient(to bottom, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent);
+  }
+  .col-empty { color: rgba(34,38,90,0.6); font-weight: 600; font-size: clamp(13px, 1vw, 20px); text-align: center; padding: 4vh 0; }
+
+  /* ====== 도전 카드 ====== */
+  .note {
+    flex: none; position: relative;
+    background: #fff; color: var(--ink);
+    border-radius: 16px;
+    border-left: 0.45vw solid var(--cc);
+    padding: 1.4vh 0.9vw 1.2vh 1vw;
+    box-shadow: 0 8px 20px rgba(40, 80, 110, 0.16);
+    cursor: pointer;
+    transition: box-shadow .3s, transform .3s;
+  }
+  .note:hover { transform: translateY(-2px); }
+  .note .text { font-size: clamp(15px, 1.3vw, 28px); font-weight: 700; line-height: 1.4; word-break: keep-all; overflow-wrap: anywhere; letter-spacing: -0.01em; }
+  .note .meta { display: flex; align-items: center; justify-content: space-between; margin-top: 0.9vh; }
+  .note .nick { font-size: clamp(12px, 0.95vw, 19px); color: var(--muted); font-weight: 600; }
+  .note .hearts { font-size: clamp(12px, 1vw, 20px); font-weight: 800; color: var(--heart); display: inline-flex; align-items: center; gap: 0.25em; }
+  .note .hearts.zero { color: #C3C8D6; }
+  .note .rank {
+    display: none; position: absolute; top: -1.1vh; right: 0.8vw;
+    font-size: clamp(11px, 0.85vw, 17px); font-weight: 800; color: #5A3B00;
+    background: linear-gradient(135deg, #FFE58A, var(--gold)); border-radius: 999px; padding: 0.15em 0.7em;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+  }
+  .note.top .rank { display: block; }
+  .note.top { box-shadow: 0 0 0 3px var(--gold), 0 0 26px rgba(255, 200, 61, 0.55), 0 8px 22px rgba(0,0,0,0.25); }
+  .note.fresh { animation: drop .7s cubic-bezier(.34,1.56,.64,1) both, flash 2.4s ease .7s; }
+  @keyframes drop { from { opacity: 0; transform: translateY(-30px) scale(.85); } to { opacity: 1; transform: none; } }
+  @keyframes flash { 0% { box-shadow: 0 0 0 4px #fff, 0 0 40px rgba(255,255,255,0.9); } 100% { box-shadow: 0 8px 22px rgba(0,0,0,0.25); } }
+  .note .hearts.bump { animation: beat .6s ease; }
+  @keyframes beat { 30% { transform: scale(1.6); } }
+
+  /* ====== 하단 ====== */
+  /* 하단: 표지의 초록 픽셀 띠 */
+  footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 1.6vh -2vw 0; padding: 2.4vh 2vw 1.2vh;
+    background: var(--green); color: #fff; font-weight: 800; text-shadow: 0 1px 2px rgba(20,70,50,.35);
+    font-size: clamp(11px, 0.85vw, 16px);
+    clip-path: polygon(0 1.2vh, 6% 1.2vh, 6% 0.6vh, 12% 0.6vh, 12% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .ctrl { display: flex; gap: 0.6vw; }
+  .ctrl button {
+    border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: #fff;
+    font-family: inherit; font-size: inherit; font-weight: 700; border-radius: 999px; padding: 0.4em 1em; cursor: pointer;
+  }
+  .ctrl button:hover { background: rgba(255,255,255,0.18); }
+  .demo { color: var(--yellow); }
+
+  /* ====== 카드 크게 보기 (카드 토크용) ====== */
+  .overlay {
+    position: fixed; inset: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(18, 60, 110, 0.6);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    opacity: 0; pointer-events: none; transition: opacity .25s;
+  }
+  .overlay.open { opacity: 1; pointer-events: auto; }
+  .big {
+    width: min(1100px, 80vw);
+    background: #fff; color: var(--ink);
+    border-radius: 32px; border-top: 1.2vh solid var(--cc);
+    padding: 6vh 4vw 5vh;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+    transform: scale(.9); transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .overlay.open .big { transform: none; }
+  .big .chip { display: inline-block; font-size: clamp(16px, 1.5vw, 30px); font-weight: 800; color: var(--cc); background: color-mix(in srgb, var(--cc) 12%, white); border-radius: 999px; padding: 0.25em 0.9em; margin-bottom: 3vh; }
+  .big .text { font-size: clamp(30px, 3.6vw, 76px); font-weight: 800; line-height: 1.35; letter-spacing: -0.03em; word-break: keep-all; overflow-wrap: anywhere; }
+  .big .text.long { font-size: clamp(24px, 2.6vw, 54px); }   /* 100자 가까운 글이 화면 밖으로 넘치지 않게 */
+  .big .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 5vh; font-size: clamp(18px, 1.8vw, 36px); font-weight: 700; }
+  .big .nick { color: var(--muted); }
+  .big .hearts { color: var(--heart); }
+
+  /* ====== 하트 TOP 5 (사회자 소개용) ====== */
+  .top-panel { width: min(1200px, 84vw); }
+  .top-panel h2 { text-align: center; font-size: clamp(28px, 3vw, 60px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4vh; }
+  .top-panel ol { list-style: none; display: grid; gap: 1.8vh; }
+  .top-panel li {
+    display: grid; grid-template-columns: 5vw 1fr auto; align-items: center; gap: 1.5vw;
+    background: #fff; color: var(--ink); border-radius: 22px; border-left: 0.6vw solid var(--cc);
+    padding: 2vh 2vw; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: drop .6s cubic-bezier(.34,1.56,.64,1) both; animation-delay: calc(var(--i) * .12s);
+  }
+  .top-panel .no { font-size: clamp(26px, 2.6vw, 52px); font-weight: 900; text-align: center; color: var(--gold); text-shadow: 0 2px 0 #C58A00; }
+  .top-panel .t { font-size: clamp(18px, 1.8vw, 36px); font-weight: 800; word-break: keep-all; line-height: 1.3; }
+  .top-panel .s { font-size: clamp(12px, 1vw, 20px); color: var(--muted); font-weight: 600; margin-top: 0.4vh; }
+  .top-panel .h { font-size: clamp(20px, 2vw, 40px); font-weight: 900; color: var(--heart); white-space: nowrap; }
+  .top-panel .none { text-align: center; color: rgba(255,255,255,0.7); font-size: clamp(16px, 1.5vw, 30px); }
+  .hint { text-align: center; margin-top: 3vh; font-size: clamp(11px, 0.85vw, 16px); color: rgba(255,255,255,0.6); }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+  <!-- 그림 조각 (종이비행기·구름·로고 화살표·화살표 장식) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-plane" viewBox="0 0 320 240">
+      <polygon points="312,6 16,100 118,132" fill="#fff"/>
+      <polygon points="312,6 118,132 152,232" fill="#F2F9FE"/>
+      <polygon points="118,132 152,232 160,150" fill="#D3EAF7"/>
+      <line x1="312" y1="6" x2="118" y2="132" stroke="#CFE6F4" stroke-width="2"/>
+    </symbol>
+    <symbol id="i-cloud" viewBox="0 0 120 64">
+      <circle cx="36" cy="40" r="20" fill="#fff"/><circle cx="62" cy="30" r="26" fill="#fff"/>
+      <circle cx="90" cy="42" r="18" fill="#fff"/><rect x="16" y="40" width="92" height="22" rx="11" fill="#fff"/>
+    </symbol>
+    <symbol id="i-tick" viewBox="0 0 24 24">
+      <path d="M4 20 L16 8" stroke="#FFC94A" stroke-width="4.5" stroke-linecap="round"/>
+      <polygon points="9,3 21,3 21,15" fill="#FFC94A"/>
+    </symbol>
+    <symbol id="i-ff" viewBox="0 0 46 34">
+      <polygon points="0,2 21,17 0,32"/><polygon points="22,2 43,17 22,32"/>
+    </symbol>
+  </svg>
+
+  <div class="sky-deco" aria-hidden="true">
+    <svg viewBox="0 0 120 64" style="width:8vw;left:50%;top:1vh;opacity:.85"><use href="#i-cloud"/></svg>
+    <svg viewBox="0 0 320 240" style="width:7vw;left:57%;top:1.2vh;transform:rotate(-6deg);opacity:.95"><use href="#i-plane"/></svg>
+    <svg viewBox="0 0 46 34" style="width:2.4vw;left:67%;top:1.5vh;fill:var(--yellow)"><use href="#i-ff"/></svg>
+    <svg viewBox="0 0 46 34" style="width:2.6vw;left:48%;top:6.5vh;fill:var(--pink);transform:rotate(200deg)"><use href="#i-ff"/></svg>
+    <svg viewBox="0 0 120 64" style="width:12vw;right:-2vw;bottom:9vh;opacity:.5"><use href="#i-cloud"/></svg>
+    <svg viewBox="0 0 120 64" style="width:10vw;left:-2vw;bottom:30vh;opacity:.45"><use href="#i-cloud"/></svg>
+  </div>
+
+  <header>
+    <div class="brand">
+      <div class="logo" role="img" aria-label="D'VELOP">D<svg class="tick" viewBox="0 0 24 24"><use href="#i-tick"/></svg>VELOP</div>
+      <span class="divider"></span>
+      <div>
+        <div class="eyebrow">2026 · 소모임 네트워킹</div>
+        <h1>우리의 <span class="accent">다음 도전</span></h1>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="stats">
+        <span class="live" id="live"><i></i><span id="live-text">LIVE</span></span>
+        <span>도전 <span class="num" id="total-cards">0</span></span>
+        <span>❤️ <span class="num" id="total-hearts">0</span></span>
+      </div>
+      <div class="join">테이블 위 QR로 나의 다음 도전을 남겨주세요</div>
+    </div>
+  </header>
+
+  <main id="board"></main>
+
+  <footer>
+    <span>함께일하는재단 <span class="demo" id="demo-note" hidden>· 👀 미리보기 모드 (예시 카드)</span></span>
+    <span class="ctrl">
+      <button type="button" id="top-btn">🏆 하트 TOP 5 (T)</button>
+      <button type="button" id="full-btn">⛶ 전체화면 (F)</button>
+    </span>
+  </footer>
+
+  <div class="overlay" id="card-modal" aria-hidden="true">
+    <div class="big" id="big" role="dialog" aria-modal="true">
+      <span class="chip" id="big-chip"></span>
+      <div class="text" id="big-text"></div>
+      <div class="meta"><span class="nick" id="big-nick"></span><span class="hearts" id="big-hearts"></span></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="top-modal" aria-hidden="true">
+    <div class="top-panel" role="dialog" aria-modal="true" aria-labelledby="top-title">
+      <h2 id="top-title">❤️ 하트를 가장 많이 받은 도전</h2>
+      <ol id="top-list"></ol>
+      <p class="hint">ESC 또는 T 키로 닫기</p>
+    </div>
+  </div>
+
+<script>
+  // ====== 설정 ======
+  var APPS_SCRIPT_URL = "";   // ← index.html 과 같은 Apps Script 웹앱 URL. 비워두면 예시 카드로 동작하는 미리보기 모드
+  var POLL_MS = 8000;
+  var SCROLL_SPEED = 26;      // 칸이 넘칠 때 자동 스크롤 속도 (px/초)
+  var TOP_N = 5;
+  var CATEGORIES = [
+    { name: "일·공부", emoji: "💼", color: "var(--c1)" },
+    { name: "돈·생활", emoji: "💰", color: "var(--c2)" },
+    { name: "해보고 싶은 경험", emoji: "✈️", color: "var(--c3)", ink: "var(--ink)" },   // 노랑 칸은 글씨를 진하게
+    { name: "아직 찾는 중", emoji: "🔍", color: "var(--c4)" }
+  ];
+  var DEMO_KEY = "develop_challenge_demo_v2";   // index.html 미리보기와 같은 저장소 (같은 브라우저에서 열면 폰 화면에서 쓴 카드가 여기도 뜬다)
+  var DEMO = !APPS_SCRIPT_URL;
+
+  function catOf(name) {
+    for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].name === name) return CATEGORIES[i];
+    return CATEGORIES[CATEGORIES.length - 1];
+  }
+  function rand(a, b) { return Math.random() * (b - a) + a; }
+
+  // ====== 4칸 만들기 ======
+  var boardEl = document.getElementById("board");
+  var cols = {};
+  CATEGORIES.forEach(function (c) {
+    var col = document.createElement("section");
+    col.className = "col";
+    col.style.setProperty("--cc", c.color);
+    if (c.ink) col.style.setProperty("--ci", c.ink);
+    var head = document.createElement("div");
+    head.className = "col-head";
+    var emo = document.createElement("span"); emo.className = "emo"; emo.textContent = c.emoji;
+    var name = document.createElement("span"); name.textContent = c.name;
+    var cnt = document.createElement("span"); cnt.className = "cnt"; cnt.textContent = "0";
+    head.appendChild(emo); head.appendChild(name); head.appendChild(cnt);
+    var body = document.createElement("div");
+    body.className = "col-body";
+    var empty = document.createElement("div");
+    empty.className = "col-empty";
+    empty.textContent = "첫 도전을 기다리는 중...";
+    body.appendChild(empty);
+    col.appendChild(head); col.appendChild(body);
+    boardEl.appendChild(col);
+    cols[c.name] = { body: body, cnt: cnt, empty: empty, pos: 0, state: "wait", t: 4 };
+  });
+
+  // ====== 카드 동기화 ======
+  var notes = {};   // id → { el, data, ... }
+  var latest = [];
+  var synced = false;
+  var openId = null;
+
+  function makeNote(c) {
+    var el = document.createElement("article");
+    el.className = "note";
+    var rank = document.createElement("span"); rank.className = "rank";
+    var text = document.createElement("div"); text.className = "text";
+    var meta = document.createElement("div"); meta.className = "meta";
+    var nick = document.createElement("span"); nick.className = "nick";
+    var hearts = document.createElement("span"); hearts.className = "hearts";
+    meta.appendChild(nick); meta.appendChild(hearts);
+    el.appendChild(rank); el.appendChild(text); el.appendChild(meta);
+    var n = { el: el, rank: rank, text: text, nick: nick, hearts: hearts, data: null };
+    el.addEventListener("click", function () { openCard(n.data.id); });
+    return n;
+  }
+
+  function fillNote(n, c, rankNo) {
+    var prevHearts = n.data ? n.data.hearts : c.hearts;
+    n.data = c;
+    n.el.style.setProperty("--cc", catOf(c.category).color);
+    n.text.textContent = c.text;
+    n.nick.textContent = "— " + c.nick;
+    n.hearts.textContent = "❤️ " + c.hearts;
+    n.hearts.classList.toggle("zero", !c.hearts);
+    if (c.hearts > prevHearts) {
+      n.hearts.classList.remove("bump");
+      void n.hearts.offsetWidth;
+      n.hearts.classList.add("bump");
+    }
+    n.el.classList.toggle("top", !!rankNo);
+    n.rank.textContent = rankNo ? "🏆 " + rankNo + "위" : "";
+  }
+
+  function topCards(cards, n) {
+    return cards.filter(function (c) { return c.hearts > 0; })
+      .map(function (c, i) { return { c: c, i: i }; })
+      .sort(function (a, b) { return b.c.hearts - a.c.hearts || a.i - b.i; })   // 동점이면 먼저 올라온 카드가 위
+      .slice(0, n)
+      .map(function (x) { return x.c; });
+  }
+
+  // 시트 순서(오래된 → 최신)대로 받아서, 새 카드는 각 칸 맨 위에 꽂는다
+  function sync(cards) {
+    latest = cards;
+    var seen = {};
+    var rankOf = {};
+    topCards(cards, 3).forEach(function (c, i) { rankOf[c.id] = i + 1; });
+
+    cards.forEach(function (c) {
+      seen[c.id] = true;
+      var n = notes[c.id];
+      var col = cols[catOf(c.category).name];
+      if (!n) {
+        n = notes[c.id] = makeNote(c);
+        col.body.insertBefore(n.el, col.body.firstChild);
+        if (synced) n.el.classList.add("fresh");   // 처음 불러온 카드 말고, 행사 중 새로 도착한 카드만 반짝
+      } else if (n.data.category !== c.category) {
+        col.body.insertBefore(n.el, col.body.firstChild);
+      }
+      fillNote(n, c, rankOf[c.id]);
+    });
+    // 시트에서 화면표시 N 처리되거나 지워진 카드는 화면에서도 내린다
+    Object.keys(notes).forEach(function (id) {
+      if (seen[id]) return;
+      notes[id].el.remove();
+      delete notes[id];
+      if (openId === id) closeAll();
+    });
+    synced = true;
+
+    var total = 0;
+    Object.keys(cols).forEach(function (k) {
+      var col = cols[k];
+      var count = col.body.querySelectorAll(".note").length;
+      col.cnt.textContent = String(count);
+      col.empty.style.display = count ? "none" : "";
+    });
+    cards.forEach(function (c) { total += c.hearts; });
+    document.getElementById("total-cards").textContent = String(cards.length);
+    document.getElementById("total-hearts").textContent = String(total);
+
+    if (openId && notes[openId]) renderBig(notes[openId].data);
+    if (document.getElementById("top-modal").classList.contains("open")) renderTop();
+  }
+
+  // ====== 칸이 넘치면 천천히 아래로 → 끝에서 잠깐 쉬고 → 맨 위(최신)로 ======
+  var lastT = 0;
+  function tick(t) {
+    var dt = Math.min(0.05, (t - lastT) / 1000 || 0);
+    lastT = t;
+    Object.keys(cols).forEach(function (k) {
+      var c = cols[k];
+      var max = c.body.scrollHeight - c.body.clientHeight;
+      if (max < 4) { c.pos = 0; c.body.scrollTop = 0; c.state = "wait"; c.t = 4; return; }
+      if (c.state === "wait") {
+        c.t -= dt;
+        if (c.t <= 0) c.state = "scroll";
+      } else if (c.state === "scroll") {
+        c.pos = Math.min(max, c.pos + SCROLL_SPEED * dt);
+        c.body.scrollTop = c.pos;
+        if (c.pos >= max) { c.state = "hold"; c.t = 3; }
+      } else if (c.state === "hold") {
+        c.t -= dt;
+        if (c.t <= 0) {
+          c.pos = 0;
+          c.body.scrollTo({ top: 0, behavior: "smooth" });
+          c.state = "wait"; c.t = 5;
+        }
+      }
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // ====== 카드 크게 보기 / 하트 TOP 5 ======
+  var cardModal = document.getElementById("card-modal");
+  var topModal = document.getElementById("top-modal");
+
+  function renderBig(c) {
+    var cat = catOf(c.category);
+    document.getElementById("big").style.setProperty("--cc", cat.color);
+    document.getElementById("big-chip").textContent = cat.emoji + " " + cat.name;
+    document.getElementById("big-text").textContent = c.text;
+    document.getElementById("big-text").classList.toggle("long", c.text.length > 50);
+    document.getElementById("big-nick").textContent = "— " + c.nick;
+    document.getElementById("big-hearts").textContent = "❤️ " + c.hearts;
+  }
+  function openCard(id) {
+    if (!notes[id]) return;
+    closeAll();
+    openId = id;
+    renderBig(notes[id].data);
+    cardModal.classList.add("open");
+    cardModal.setAttribute("aria-hidden", "false");
+  }
+
+  function renderTop() {
+    var list = document.getElementById("top-list");
+    list.innerHTML = "";
+    var top = topCards(latest, TOP_N);
+    if (!top.length) {
+      var none = document.createElement("li");
+      none.className = "none";
+      none.style.background = "none"; none.style.boxShadow = "none"; none.style.border = "0";
+      none.textContent = "아직 하트가 없어요. 폰에서 ‘모두의 도전 보기’로 하트를 보내주세요!";
+      list.appendChild(none);
+      return;
+    }
+    top.forEach(function (c, i) {
+      var cat = catOf(c.category);
+      var li = document.createElement("li");
+      li.style.setProperty("--cc", cat.color);
+      li.style.setProperty("--i", String(i));
+      var no = document.createElement("div"); no.className = "no"; no.textContent = String(i + 1);
+      var body = document.createElement("div");
+      var t = document.createElement("div"); t.className = "t"; t.textContent = c.text;
+      var s = document.createElement("div"); s.className = "s"; s.textContent = cat.emoji + " " + cat.name + " · " + c.nick;
+      body.appendChild(t); body.appendChild(s);
+      var h = document.createElement("div"); h.className = "h"; h.textContent = "❤️ " + c.hearts;
+      li.appendChild(no); li.appendChild(body); li.appendChild(h);
+      list.appendChild(li);
+    });
+  }
+  function toggleTop() {
+    var open = !topModal.classList.contains("open");
+    closeAll();
+    if (open) {
+      renderTop();
+      topModal.classList.add("open");
+      topModal.setAttribute("aria-hidden", "false");
+    }
+  }
+  function closeAll() {
+    openId = null;
+    [cardModal, topModal].forEach(function (m) { m.classList.remove("open"); m.setAttribute("aria-hidden", "true"); });
+  }
+  function toggleFull() {
+    try {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    } catch (_) {}
+  }
+
+  cardModal.addEventListener("click", closeAll);
+  topModal.addEventListener("click", closeAll);
+  document.getElementById("top-btn").addEventListener("click", toggleTop);
+  document.getElementById("full-btn").addEventListener("click", toggleFull);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeAll();
+    else if (e.key === "t" || e.key === "T" || e.key === "ㅅ") toggleTop();
+    else if (e.key === "f" || e.key === "F" || e.key === "ㄹ") toggleFull();
+  });
+
+  // ====== 데이터 가져오기 ======
+  // 실제: JSONP (CORS 우회)
+  var fetching = false;
+  var lastOk = Date.now();
+  // 30초 넘게 새 목록을 못 받으면 LIVE 표시를 빨갛게 바꿔 운영진이 바로 알 수 있게 한다
+  function checkLive() {
+    var off = !DEMO && Date.now() - lastOk > 30000;
+    document.getElementById("live").classList.toggle("off", off);
+    document.getElementById("live-text").textContent = off ? "연결 확인 중" : "LIVE";
+  }
+  setInterval(checkLive, 5000);
+  function fetchLive() {
+    if (fetching) return;   // 응답이 늦을 때 요청이 겹치지 않게
+    fetching = true;
+    var cbName = "jsonp_cb_" + Date.now();
+    var script = document.createElement("script");
+    var timer = setTimeout(cleanup, 15000);
+    function cleanup() {
+      clearTimeout(timer);
+      window[cbName] = function () {};   // 늦게 도착한 응답이 오류를 내지 않게
+      script.remove();
+      fetching = false;
+    }
+    window[cbName] = function (data) {
+      cleanup();
+      try {
+        if (data && data.cards) { lastOk = Date.now(); checkLive(); sync(data.cards); }
+        else if (data && data.error) console.error("서버 오류:", data.error);
+      } catch (err) { console.error("카드 처리 오류:", err); }
+    };
+    script.onerror = function () {
+      console.error("데이터를 불러오지 못했습니다. URL 또는 접근 권한을 확인하세요.");
+      cleanup();
+    };
+    script.src = APPS_SCRIPT_URL + "?action=cards&callback=" + cbName + "&_=" + Date.now();
+    document.body.appendChild(script);
+  }
+
+  // 미리보기: index.html 과 같은 저장소를 읽어, 같은 브라우저 폰 화면에서 쓴 카드·하트만 보여준다
+  // 예시 카드: 지금은 비워 둠. 필요하면 ["카테고리", "닉네임", "한 줄", 하트수] 형식으로 추가
+  var SAMPLE = [];
+  var demoMem = null;   // 저장소가 막힌 환경에서도 흉내가 이어지도록 메모리에도 들고 있는다
+  function demoStore() {
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem(DEMO_KEY)); } catch (_) {}
+    if (!s) s = demoMem;
+    if (!s) {
+      s = { cards: SAMPLE.map(function (r, i) {
+        return { id: "demo" + i, category: r[0], nick: r[1], text: r[2], base: r[3] };
+      }), hearts: {} };
+    }
+    return s;
+  }
+  function demoSave(s) { try { localStorage.setItem(DEMO_KEY, JSON.stringify(s)); } catch (_) {} }
+  function fetchDemo() {
+    var s = demoStore();
+    var counts = {};
+    Object.keys(s.hearts).forEach(function (d) { var c = s.hearts[d]; if (c) counts[c] = (counts[c] || 0) + 1; });
+    sync(s.cards.map(function (c) {
+      return { id: c.id, category: c.category, nick: c.nick, text: c.text, hearts: (c.base || 0) + (counts[c.id] || 0) };
+    }));
+  }
+  if (DEMO) {
+    document.getElementById("demo-note").hidden = false;
+    fetchDemo();
+    setInterval(fetchDemo, 2000);
+  } else {
+    fetchLive();
+    setInterval(fetchLive, POLL_MS);
+  }
+</script>
+</body>
+</html>
