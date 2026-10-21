@@ -61,19 +61,21 @@
   .logo.sm { font-size: 18px; }
 
   /* 인트로 포스터 */
-  .hero { position: relative; height: 230px; margin: 0 -16px; }
+  .hero { position: relative; height: 150px; margin: 0 -16px; }
   .hero svg { position: absolute; }
-  .hero .plane { width: 300px; left: 50%; top: 14px; transform: translateX(-46%); filter: drop-shadow(0 10px 14px rgba(10, 70, 120, .18)); animation: float 4s ease-in-out infinite; }
+  .hero .plane { width: 200px; left: 50%; top: 0; transform: translateX(-46%); filter: drop-shadow(0 10px 14px rgba(10, 70, 120, .18)); animation: float 4s ease-in-out infinite; }
   @keyframes float { 50% { transform: translateX(-46%) translateY(-8px); } }
   .band {
     position: relative; background: var(--main); color: #fff;
-    padding: 34px 22px 26px;
+    padding: 28px 22px 20px;
     clip-path: polygon(0 22px, 12% 22px, 12% 10px, 26% 10px, 26% 0, 100% 0, 100% 100%, 0 100%);
   }
   .band .px { position: absolute; width: 18px; height: 18px; }
-  .band h1 { color: #fff; margin: 16px 0 4px; text-shadow: 0 1px 3px rgba(20,70,50,.35); }
+  .band .logo { font-size: 40px; }
+  .band h1 { color: #fff; margin: 12px 0 4px; text-shadow: 0 1px 3px rgba(20,70,50,.35); }
   .band .sub { color: #fff; margin-bottom: 0; text-shadow: 0 1px 2px rgba(20,70,50,.35); }
-  .intro-card { border-radius: 0 0 var(--radius) var(--radius) !important; }
+  .intro-card { border-radius: 0 0 var(--radius) var(--radius) !important; padding: 22px 20px 20px; }
+  .intro-card .btn { padding: 14px 18px; margin-top: 12px; }
 
   .screen { display: none; animation: fadeUp .4s ease both; }
   .screen.active { display: block; }
@@ -98,10 +100,11 @@
   h1 { font-weight: 800; font-size: 32px; line-height: 1.25; letter-spacing: -0.03em; margin-bottom: 8px; }
   h1 .accent { color: var(--yellow); }
   .sub { font-weight: 600; font-size: 16px; color: var(--muted); margin-bottom: 18px; }
-  .intro p { margin-bottom: 10px; font-size: 15.5px; word-break: keep-all; }
+  .intro p { margin-bottom: 8px; font-size: 15.5px; word-break: keep-all; }
+  .intro p:last-child { margin-bottom: 0; }
 
   /* 카테고리 4칸 미리보기 (인트로) */
-  .cat-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 18px 0 6px; }
+  .cat-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 4px; }
   .cat-preview div {
     border-radius: 12px; padding: 10px 12px; font-size: 14px; font-weight: 700;
     background: color-mix(in srgb, var(--cc) 14%, white); color: color-mix(in srgb, var(--cc) 72%, black);
@@ -238,6 +241,20 @@
 
   .foundation-logo { display:block; width:220px; max-width:65vw; height:auto; margin:0 auto; }
   .footer { text-align: center; color: rgba(34,38,90,.65); font-size: 12.5px; font-weight: 600; margin-top: 22px; }
+  @media (max-height: 760px) {
+    .hero { height: 120px; }
+    .hero .plane { width: 160px; }
+    .hero svg:not(.plane) { max-width: 70px; }
+    .band { padding: 26px 20px 18px; }
+    .band .logo { font-size: 36px; }
+    .band h1 { font-size: 28px; margin-top: 10px; }
+    .band .sub { font-size: 14px; }
+    .intro-card { padding: 20px 18px 18px; }
+    .intro p { font-size: 14.5px; }
+    .cat-preview { margin-top: 12px; }
+    .cat-preview div { padding: 8px 10px; font-size: 13px; }
+    .intro-card .btn { padding: 12px 16px; font-size: 16px; }
+  }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   /* color-mix 를 모르는 옛 폰(iOS 16.1 이하 등)에서 선택한 카테고리 색이 사라지지 않게 */
   @supports not (color: color-mix(in srgb, red 50%, white)) {
@@ -283,8 +300,8 @@
       <svg viewBox="0 0 120 64" style="width:92px;left:14px;top:6px"><use href="#i-cloud"/></svg>
       <svg viewBox="0 0 46 34" style="width:40px;right:22%;top:4px;fill:var(--yellow);transform:rotate(-15deg)"><use href="#i-ff"/></svg>
       <svg class="plane" viewBox="0 0 320 240"><use href="#i-plane"/></svg>
-      <svg viewBox="0 0 46 34" style="width:58px;left:8px;top:150px;fill:var(--pink);transform:rotate(200deg)"><use href="#i-ff"/></svg>
-      <svg viewBox="0 0 120 64" style="width:104px;right:-8px;top:150px"><use href="#i-cloud"/></svg>
+      <svg viewBox="0 0 46 34" style="width:58px;left:8px;top:108px;fill:var(--pink);transform:rotate(200deg)"><use href="#i-ff"/></svg>
+      <svg viewBox="0 0 120 64" style="width:104px;right:-8px;top:108px"><use href="#i-cloud"/></svg>
     </div>
     <div class="band">
       <span class="px" style="right:0;top:0;background:var(--yellow)"></span>
@@ -296,9 +313,9 @@
     </div>
     <div class="card intro-card">
       <div class="intro">
-        <p>앞으로 해보고 싶은 것, 요즘 고민하는 것,<br>작아도 괜찮은 나의 다음 도전을 남겨주세요.</p>
-        <p>아직 잘 모르겠다면 <b>‘아직 찾는 중’</b>도 멋진 답이에요.</p>
-        <p><strong>마음속 도전, 오늘 한 줄로 꺼내보세요.</strong><br>작성하면 이루어질 거예요.</p>
+        <p>앞으로 해보고 싶은 것, 요즘 고민하는 것<br>나의 다음 도전을 남겨주세요.</p>
+        <p>잘 모르겠다면 <b>‘아직 찾는 중’</b>도 멋진 답이에요.</p>
+        <p><strong>작성하면 이루어질 거예요.</strong></p>
       </div>
       <div class="cat-preview" id="cat-preview"></div>
       <button class="btn" id="start-btn" type="button">도전 남기기 ✍️</button>
