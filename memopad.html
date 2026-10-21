@@ -137,6 +137,9 @@
     font-family: inherit; font-size: inherit; font-weight: 700; border-radius: 999px; padding: 0.4em 1em; cursor: pointer;
   }
   .ctrl button:hover { background: rgba(255,255,255,0.18); }
+  .foundation-brand { display:inline-flex; align-items:center; gap:.7vw; }
+  .foundation-logo-badge { display:inline-flex; align-items:center; background:#fff; padding:.6vh .7vw; border-radius:6px; }
+  .foundation-logo { display:block; width:clamp(160px,17vw,280px); max-width:24vw; height:auto; }
   .demo { color: var(--yellow); }
 
   /* ====== 카드 크게 보기 (카드 토크용) ====== */
@@ -240,7 +243,7 @@
       <div class="logo" role="img" aria-label="D'VELOP">D<svg class="tick" viewBox="0 0 24 24"><use href="#i-tick"/></svg>VELOP</div>
       <span class="divider"></span>
       <div>
-        <div class="eyebrow">D’VELOP 2026 · 도전 공유 게시판</div>
+        <div class="eyebrow">D’VELOP 2026 · 가능성 제작소</div>
         <h1>우리의 <span class="accent">다음 도전</span></h1>
       </div>
     </div>
@@ -257,7 +260,7 @@
   <main id="board"></main>
 
   <footer>
-    <span>함께일하는재단 <span class="demo" id="demo-note" hidden>· 👀 미리보기 모드 (예시 카드)</span></span>
+    <span class="foundation-brand"><span class="foundation-logo-badge"><img class="foundation-logo" src="assets/withwork-logo.png" alt="함께일하는재단" width="1295" height="189"></span><span class="demo" id="demo-note" hidden>· 👀 미리보기 모드 (예시 카드)</span></span>
     <span class="ctrl">
       <button type="button" id="top-btn">🏆 하트 TOP 5 (T)</button>
       <button type="button" id="category-top-btn">❤️ 카테고리별 하트 TOP 3 (C)</button>
